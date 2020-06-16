@@ -21,9 +21,17 @@
     "@angular/platform-browser": "~9.1.9",
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
-    "rxjs": "~6.5.4",
+    "@syncfusion/ej2": "^18.1.56",
+    "@syncfusion/ej2-angular-filemanager": "^18.1.56",
+    "angular-confirmation-popover": "^5.0.0",
+    "angular2-uuid": "^1.1.1",
+    "bootstrap": "^4.5.0",
+    "core-js": "^3.6.5",
+    "font-awesome": "^4.7.0",
+    "lodash.isequal": "^4.5.0",
+    "rxjs": "^6.5.5",
     "tslib": "^1.10.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "^0.10.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.901.7",

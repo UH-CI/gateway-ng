@@ -12,11 +12,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
-
 import { SidenavServiceService } from './sidenav-service.service';
 import { HomepageComponent } from './homepage/homepage.component';
 import { FilemanagerComponent } from './filemanager/filemanager.component';
 import { FooterComponent } from './footer/footer.component';
+
+import { FileManagerAllModule } from '@syncfusion/ej2-angular-filemanager';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { FooterComponent } from './footer/footer.component';
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    FileManagerAllModule
   ],
   providers: [SidenavServiceService],
   bootstrap: [AppComponent]
