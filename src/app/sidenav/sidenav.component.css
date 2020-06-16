@@ -1,20 +1,39 @@
-.router-content {
-    position: fixed;
-    height: 100%;
-    min-height: 100%;
-    width: 100%;
-    min-width: 100%;
+.example-container {
+    position: absolute;
+    top: 0px;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+  }
+  
+  .example-sidenav-opened {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    background-color: #2b3643;
+  }
+  
+  .example-sidenav-closed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 59px;
+    background-color: #2b3643;
+  }
+
+.opened {
+    padding-left: 141px;
+}
+
+.closed {
+    padding-left: 0px;
 }
 
 .content {
     padding-top: 60px;
 }
 
-.menu-icon {
-    background-color: #2b3643;
-}
-
 .mat-list-item { 
     color: white;
-
 }

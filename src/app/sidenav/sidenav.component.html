@@ -1,5 +1,5 @@
-<mat-drawer-container fixedInViewport="true" class="router-content" autosize>
-  <mat-drawer class="menu-icon" #sidenav mode="side" disableClose="true" opened="true">
+<mat-sidenav-container class="example-container" >
+  <mat-sidenav [ngClass]="isExpanded ? 'example-sidenav-opened' : 'example-sidenav-closed'" #sidenav [fixedInViewport]="false" mode="side" opened="true" >
 
     <mat-nav-list>
 	  <mat-list-item >
@@ -25,10 +25,12 @@
 			<mat-icon>folder_shared</mat-icon>
       </mat-list-item>
     </mat-nav-list>
-  </mat-drawer>
+  </mat-sidenav>
 
-  <app-header></app-header>
+  <mat-sidenav-content [ngClass]="isExpanded ? 'opened' : 'closed'">
+    <app-header></app-header>
   <div class="content">
-  	<router-outlet></router-outlet>
+	<router-outlet></router-outlet>
   </div>
-</mat-drawer-container>
+  </mat-sidenav-content>
+</mat-sidenav-container>
