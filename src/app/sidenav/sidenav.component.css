@@ -18,12 +18,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 59px;
     background-color: #2b3643;
   }
 
 .opened {
-    padding-left: 141px;
+    padding-left: 0px;
 }
 
 .closed {

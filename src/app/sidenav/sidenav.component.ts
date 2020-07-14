@@ -17,6 +17,7 @@ export class SidenavComponent implements AfterViewInit {
 
   toggle() {
     this.isExpanded = !this.isExpanded;
+    window.dispatchEvent(new Event('resize'));
   }
 
 	ngAfterViewInit(): void {

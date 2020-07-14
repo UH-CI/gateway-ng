@@ -18,6 +18,7 @@ import { FilemanagerComponent } from './filemanager/filemanager.component';
 import { FooterComponent } from './footer/footer.component';
 
 import { FileManagerAllModule } from '@syncfusion/ej2-angular-filemanager';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { FileManagerAllModule } from '@syncfusion/ej2-angular-filemanager';
     SidenavComponent,
     HomepageComponent,
     FilemanagerComponent,
-    FooterComponent
+    FooterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
