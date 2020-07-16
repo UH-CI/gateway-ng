@@ -11,38 +11,21 @@
  */
 import { Credential } from './credential';
 import { Capability } from './capability';
-
+import { respLinks } from './respLinks';
 
 export interface TSystem { 
-    id?: number;
-    created?: string;
-    updated?: string;
-    tenant?: string;
+    id?: string;
     name?: string;
+    type?: string;
+    default?: boolean;
+    _links?: respLinks;
+    available?: boolean;
     description?: string;
-    systemType?: TSystem.SystemTypeEnum;
-    owner?: string;
-    host?: string;
-    enabled?: boolean;
-    effectiveUserId?: string;
-    defaultAccessMethod?: TSystem.DefaultAccessMethodEnum;
-    accessCredential?: Credential;
-    bucketName?: string;
-    rootDir?: string;
-    transferMethods?: Array<TSystem.TransferMethodsEnum>;
-    port?: number;
-    useProxy?: boolean;
-    proxyHost?: string;
-    proxyPort?: number;
-    jobCanExec?: boolean;
-    jobLocalWorkingDir?: string;
-    jobLocalArchiveDir?: string;
-    jobRemoteArchiveSystem?: string;
-    jobRemoteArchiveDir?: string;
-    jobCapabilities?: Array<Capability>;
-    tags?: Array<string>;
-    notes?: object;
+    public?: boolean;
+    status?: string;
+
 }
+
 export namespace TSystem {
     export type SystemTypeEnum = 'LINUX' | 'OBJECT_STORE';
     export const SystemTypeEnum = {
