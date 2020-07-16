@@ -1,0 +1,7 @@
+<div class="row">
+  <div *ngIf="isDir()"> <i class="fa fa-folder-o"></i></div>
+  <div *ngIf="!isDir()"> <i class="fa fa-file-o"></i></div>
+  <div> {{ fileInfo.name }} </div>
+  <div> {{ fileInfo.size | filesize }}</div>
+  <div> {{ fileInfo.lastModified | date }}</div>
+</div>

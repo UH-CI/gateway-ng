@@ -17,8 +17,32 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { FilemanagerComponent } from './filemanager/filemanager.component';
 import { FooterComponent } from './footer/footer.component';
 
+
+import { JwtInterceptor, AuthInterceptor } from './_helpers/jwt.interceptor';
+import { ErrorInterceptor } from './_helpers/error.interceptor';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { APP_INITIALIZER } from '@angular/core';
+import { NgHttpLoaderModule } from 'ng-http-loader';
+import { AppConfig } from './_services/config.service';
+import { DataBrowserComponent } from './components/data-browser/data-browser.component';
+import { FileListingRowComponent } from './components/file-listing-row/file-listing-row.component';
+import { NgxFilesizeModule } from 'ngx-filesize';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalPreviewComponent } from './components/modal-preview/modal-preview.component';
+import { SecuredImageComponent } from './components/secured-image/secured-image.component';
+import { SecuredTextComponent } from './components/secured-text/secured-text.component';
+
 import { FileManagerAllModule } from '@syncfusion/ej2-angular-filemanager';
 import { LoginComponent } from './login/login.component';
+import {environment} from '../environments/environment';
+import { MainComponent } from './components/main/main.component';
+import {ApiModule as FilesClient} from './apis/ng-tapis-files-client';
+import {ApiModule as SystemsClient, Configuration} from './apis/ng-tapis-systems-client';
+
+export function initializeApp(appConfig: AppConfig) {
+  return () => appConfig.load();
+}
 
 @NgModule({
   declarations: [
@@ -26,11 +50,19 @@ import { LoginComponent } from './login/login.component';
     HeaderComponent,
     SidenavComponent,
     HomepageComponent,
+    MainComponent,
     FilemanagerComponent,
     FooterComponent,
-    LoginComponent
+    LoginComponent,
+    FileListingRowComponent,
+    ModalPreviewComponent,
+    SecuredImageComponent,
+    SecuredTextComponent,
+    DataBrowserComponent
   ],
   imports: [
+    FilesClient.forRoot((): Configuration => new Configuration({basePath: environment.baseUrl})),
+    SystemsClient.forRoot((): Configuration => new Configuration({basePath: environment.baseUrl})),
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -38,9 +70,34 @@ import { LoginComponent } from './login/login.component';
     MatToolbarModule,
     MatIconModule,
     MatListModule,
-    FileManagerAllModule
+    FileManagerAllModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    NgHttpLoaderModule.forRoot(),
+    NgxFilesizeModule,
+    NgbModule
   ],
-  providers: [SidenavServiceService],
+  providers: [
+    SidenavServiceService,
+    AppConfig,
+    { 
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AppConfig], 
+      multi: true 
+    },
+    { 
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true 
+    },
+/*     {
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: AuthInterceptor 
+    }, */
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

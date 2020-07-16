@@ -26,8 +26,12 @@ export class AuthenticationService {
           withCredentials: true,
           headers:{ 'Authorization':  'Basic ' + btoa(username + ":" + password)}
         }
+
+        console.log(AppConfig.settings.aad.loginURL);
+
         return this.http.post<any>(AppConfig.settings.aad.loginURL, {}, options)
             .pipe(map(user => {
+
                 // login successful if there's a jwt token in the response
                 if (user && user.access_token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes

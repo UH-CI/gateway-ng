@@ -3,7 +3,7 @@
     "name": "#{envName}"
     },
     "appInsights": {
-    "instrumentationKey": "#{appInsightsKey}"
+    "instrumentationKey": "3EF4qO88R7TGgtbxQRCfujlWFzMa"
     },
     "logging": {
     "console": true,
@@ -11,12 +11,12 @@
     },
     "aad": {
     "requireAuth": true,
-    "tenant": "#{aadTenant}",
-    "clientId": "#{aadClientId}",
-    "loginUrl":""
+    "tenant": "hawaii",
+    "clientId": "johncli-live",
+    "loginURL":"https://uhhpcgw.its.hawaii.edu:8888/login"
     },
     "apiServer": {
     "metadata": "https://#{apiServerPrefix}.demo.com/api/v1.0/",
-    "rule": "https://#{apiServerPrefix}.demo.com/api/v1.0/",
+    "rule": "https://#{apiServerPrefix}.demo.com/api/v1.0/"
     }
 }

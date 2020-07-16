@@ -1,0 +1,13 @@
+export * from './content.service';
+import { ContentService } from './content.service';
+export * from './fileOperations.service';
+import { FileOperationsService } from './fileOperations.service';
+export * from './health.service';
+import { HealthService } from './health.service';
+export * from './permissions.service';
+import { PermissionsService } from './permissions.service';
+export * from './share.service';
+import { ShareService } from './share.service';
+export * from './transfers.service';
+import { TransfersService } from './transfers.service';
+export const APIS = [ContentService, FileOperationsService, HealthService, PermissionsService, ShareService, TransfersService];

@@ -1,0 +1,54 @@
+<div class="row px-2">
+  <div class="col col-md-2 systems-list">
+    <h3> Storage Systems </h3>
+
+    <ul class="list-group">
+      <li class="list-group-item clickable"
+          (click)="selectSystem(sys)"
+          *ngFor="let sys of systemsListing$ | async"
+          [ngClass]="{'active': sys===activeSystem}">
+        <i class="fas fa-database fa-fw"></i>
+        {{ sys.name }}
+      </li>
+    </ul>
+  </div>
+  <div class="col col-md-10 ">
+    <div class="row justify-content-end py-2">
+      <div>
+<!--        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-pen"></i> Rename</button>-->
+        <button type="button" class="btn btn-outline-primary" (click)="delete()"> <i class="fas fa-trash-alt"></i> Trash</button>
+<!--        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-arrows-alt"></i> Move</button>-->
+<!--        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-copy"></i> Copy</button>-->
+        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-download"></i> Download</button>
+
+      </div>
+    </div>
+    <div class="file-listing-table">
+      <table class="table table-hover ">
+        <thead>
+          <tr>
+            <th scope="col"> Name </th>
+            <th scope="col"> Size </th>
+            <th scope="col"> Last Modified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let file of listing$ | async " (click)="selectFile(file)" class="clickable" [ngClass]="{'selected-file': file === selectedFile }">
+            <td>
+              <i *ngIf="file.path.endsWith('/')" class="far fa-folder-open fa-fw"> </i>
+              <i *ngIf="!file.path.endsWith('/')" class="far fa-file fa-fw"> </i>
+              <span class="tapis-file-name clickable" (click)="preview(file)">{{ file.name }} </span>
+            </td>
+            <td>
+              {{ file.size | filesize }}
+            </td>
+            <td>
+              {{ file.lastModified | date:"long" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  name: 'dev'
+  name: 'dev',
+  baseUrl: 'https://dev.tapis.io'
 };

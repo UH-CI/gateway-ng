@@ -1,0 +1,23 @@
+:host {
+  max-height: 10em;
+  .tapis-file-name {
+    color: #9d85ef;
+  }
+
+  .systems-list {
+    height: calc(100vh - 220px);
+    border-right: 1px solid #d3d3d3;
+  }
+
+  .file-listing-table {
+    height: calc(100vh - 220px);
+    overflow-y: scroll;
+  }
+
+  .selected-file {
+    border-left: 6px solid red;
+  }
+
+
+
+}

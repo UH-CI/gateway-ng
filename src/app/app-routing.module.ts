@@ -2,18 +2,35 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
 import { FilemanagerComponent } from './filemanager/filemanager.component';
-
+import { AuthGuard } from './_guards/auth.guard';
+import { LoginComponent } from './login/login.component';
+import {DataBrowserComponent} from './components/data-browser/data-browser.component';
+import {MainComponent} from './components/main/main.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomepageComponent
+    component: HomepageComponent,
+    canActivate: [AuthGuard]
   },
   {
-    path: 'filemanager',
-    component: FilemanagerComponent
-  }
+    path: 'filemanager231',
+    component: FilemanagerComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'filemanager', 
+    component: MainComponent, 
+    canActivate: [AuthGuard]
+  },
+  { path: '**', redirectTo: '' }
 ];
+
+export const routing = RouterModule.forRoot(routes);
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

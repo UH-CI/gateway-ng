@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  name: 'dev'
+  name: 'dev',
+  baseUrl: 'https://uhhpctenant.its.hawaii.edu'
 };
 
 /*
