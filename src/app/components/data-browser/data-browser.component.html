@@ -20,7 +20,7 @@
 <!--        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-arrows-alt"></i> Move</button>-->
 <!--        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-copy"></i> Copy</button>-->
         <button type="button" class="btn btn-outline-primary"> <i class="fas fa-download"></i> Download</button>
-
+        <button type="button" class="btn btn-outline-primary" (click)="moveUp()"> <i class="fas fa-download"></i> Move Up</button>
       </div>
     </div>
     <div class="file-listing-table">
@@ -35,12 +35,12 @@
         <tbody>
           <tr *ngFor="let file of listing$ | async " (click)="selectFile(file)" class="clickable" [ngClass]="{'selected-file': file === selectedFile }">
             <td>
-              <i *ngIf="file.path.endsWith('/')" class="far fa-folder-open fa-fw"> </i>
-              <i *ngIf="!file.path.endsWith('/')" class="far fa-file fa-fw"> </i>
+              <i *ngIf="file.format == 'folder'" class="far fa-folder-open fa-fw"></i>
+              <i *ngIf="file.format != 'folder'" class="far fa-file fa-fw"> </i>
               <span class="tapis-file-name clickable" (click)="preview(file)">{{ file.name }} </span>
             </td>
             <td>
-              {{ file.size | filesize }}
+              {{ file.length | filesize }}
             </td>
             <td>
               {{ file.lastModified | date:"long" }}

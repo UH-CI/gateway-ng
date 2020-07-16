@@ -27,13 +27,14 @@ export class DataBrowserComponent implements OnInit {
   public readonly systemsListing$: Observable<Array<TSystem>> = this.systemsListing.asObservable();
   public selectedFile: FileInfo;
   private currentPath: string;
+  private lastPath: string;
 
 
 
   ngOnInit(): void {
     this.systemsService.getSystems()
       .subscribe( (resp) => {
-        const systems = resp.result.filter( (s) => !s.jobCanExec);
+        const systems = resp.result  //.filter( (s) => !s.jobCanExec); v3 jobCanExec
         this.systemsListing.next(systems);
         this.activeSystemSubject.next(systems[0]);
     }, (error) => {
@@ -44,6 +45,7 @@ export class DataBrowserComponent implements OnInit {
       this.activeSystem = next;
       this.listing.next([]);
       this.currentPath = '';
+      this.lastPath = '';
       this.browseFolder(this.currentPath);
     });
   }
@@ -54,7 +56,7 @@ export class DataBrowserComponent implements OnInit {
 
   browseFolder(path: string) {
     this.currentPath = path;
-    this.fileOpsService.listFiles(this.activeSystem.name, path).subscribe( (resp) => {
+    this.fileOpsService.listFiles(this.activeSystem.id, path).subscribe( (resp) => {
       this.listing.next(resp.result);
     }, (error) => {
       console.log(error);
@@ -62,20 +64,30 @@ export class DataBrowserComponent implements OnInit {
   }
 
   preview(fileItem: FileInfo): void {
+    console.log('preview file')
     const modalRef = this.modalService.open(ModalPreviewComponent, { size: 'xl' });
     modalRef.componentInstance.file = fileItem;
     modalRef.componentInstance.system = this.activeSystem;
   }
 
   delete(): void {
-    this.fileOpsService._delete(this.activeSystem.name, this.selectedFile.path)
+    this.fileOpsService._delete(this.activeSystem.id, this.selectedFile.path)
       .subscribe( (resp) => {
       this.browseFolder(this.currentPath);
     });
   }
 
   selectFile(file: FileInfo): void {
+    if (file.format == 'folder') {
+      this.currentPath = file.path;
+      this.browseFolder(this.currentPath);
+    } 
     this.selectedFile = this.selectedFile === file ? null : file;
+  }
+
+  moveUp(): void {
+    this.currentPath = this.currentPath.slice(0,this.currentPath.lastIndexOf('/'));
+    this.browseFolder(this.currentPath);
   }
 
 

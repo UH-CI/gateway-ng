@@ -18,7 +18,7 @@ export class ModalPreviewComponent implements OnInit {
   constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit(): void {
-    this.sourceURI = `${environment.baseUrl}/files/v2/media/system/${this.system.name}/${this.file.path}`;
+    this.sourceURI = `${environment.baseUrl}/files/v2/media/system/${this.system.id}${this.file.path}`;
   }
 
 }

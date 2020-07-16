@@ -16,7 +16,7 @@ export class FileListingRowComponent implements OnInit {
   }
 
   public isDir(): boolean {
-    return this.fileInfo.path.endsWith('/');
+    return this.fileInfo.format == 'folder';
   }
 
 }

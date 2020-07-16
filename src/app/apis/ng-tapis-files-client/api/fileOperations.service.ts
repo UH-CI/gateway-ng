@@ -281,7 +281,7 @@ export class FileOperationsService {
             responseType = 'text';
         }
 
-        return this.httpClient.get<FileListingResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}/${encodeURIComponent(String(path))}`,
+        return this.httpClient.get<FileListingResponse>(`${this.configuration.basePath}/files/v2/listings/system/${encodeURIComponent(String(systemId))}${encodeURIComponent(String(path)).replace(/%2F/g,"/")}`,
             {
                 params: queryParameters,
                 responseType: <any>responseType,

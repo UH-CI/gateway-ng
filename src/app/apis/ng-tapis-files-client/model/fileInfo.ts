@@ -10,14 +10,19 @@
  * Do not edit the class manually.
  */
 
+import { respLinks } from '../../ng-tapis-systems-client/model/respLinks';
+
 
 export interface FileInfo { 
-    lastModified?: string;
     name?: string;
     path?: string;
-    /**
-     * size in kB
-     */
-    size?: number;
+    lastModified?: string;
+    length?: number;
+    permissions?: string;
+    format?: string;
+    mimeType?: string;
+    type?: string;
+    system?: string,
+    _links?: respLinks;
 }
 

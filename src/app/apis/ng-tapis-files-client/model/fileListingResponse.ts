@@ -15,7 +15,7 @@ import { FileInfo } from './fileInfo';
 export interface FileListingResponse { 
     status?: string;
     message?: string;
-    result?: Array<FileInfo>;
     version?: string;
+    result?: Array<FileInfo>;
 }
 
