@@ -13,10 +13,12 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec }       from '@angular/common/http';
+         HttpResponse, HttpEvent, HttpParameterCodec,
+         HttpErrorResponse, HttpEventType }       from '@angular/common/http';
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { map } from  'rxjs/operators';
 import { FileListingResponse } from '../model/models';
 import { FileStringResponse } from '../model/models';
 import { FormDataContentDisposition } from '../model/models';
@@ -189,7 +191,7 @@ export class FileOperationsService {
         const consumes: string[] = [
             'multipart/form-data'
         ];
-/* 
+
         const canConsumeForm = this.canConsumeForm(consumes);
 
         let formParams: { append(param: string, value: any): any; };
@@ -203,7 +205,7 @@ export class FileOperationsService {
 
         if (file !== undefined) {
             formParams = formParams.append('file', useForm ? new Blob([JSON.stringify(file)], {type: 'application/json'}) : <any>file) as any || formParams;
-        } */
+        }
 
         let responseType: 'text' | 'json' = 'json';
         if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
@@ -218,6 +220,20 @@ export class FileOperationsService {
                 observe: observe,
                 reportProgress: reportProgress
             }
+        ).pipe(map((event) => {
+
+            switch (event.type) {
+      
+              case HttpEventType.UploadProgress:
+                const progress = Math.round(100 * event.loaded / event.total);
+                return { status: 'progress', message: progress };
+      
+              case HttpEventType.Response:
+                return event.body;
+              default:
+                return `Unhandled event: ${event.type}`;
+            }
+          })
         );
     }
 
