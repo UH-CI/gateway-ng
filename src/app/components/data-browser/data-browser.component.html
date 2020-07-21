@@ -19,8 +19,9 @@
         <button type="button" class="btn btn-outline-primary" (click)="delete()"> <i class="fas fa-trash-alt"></i> Trash</button>
 <!--        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-arrows-alt"></i> Move</button>-->
 <!--        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-copy"></i> Copy</button>-->
-        <button type="button" class="btn btn-outline-primary"> <i class="fas fa-download"></i> Download</button>
+        <button type="button" class="btn btn-outline-primary" (click)="download()"> <i class="fas fa-download"></i> Download</button>
         <button type="button" class="btn btn-outline-primary" (click)="moveUp()"> <i class="fas fa-download"></i> Move Up</button>
+        <button type="button" class="btn btn-outline-primary" (click)="testRename()"> <i class="fas fa-download"></i> Test Rename</button>
       </div>
     </div>
     <div class="file-listing-table">
@@ -49,6 +50,12 @@
         </tbody>
       </table>
     </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <input type="file" name="avatar" (change)="onFileChange($event)" />
+    <button type="submit">Upload</button>
+
+  </form>
   </div>
 
 </div>

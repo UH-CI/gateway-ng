@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {FileOperationsService} from '../../apis/ng-tapis-files-client';
+import {FileOperationsService, ContentService, UploadResponse } from '../../apis/ng-tapis-files-client';
 import {SystemsService, TSystem} from '../../apis/ng-tapis-systems-client';
 import {FileInfo} from '../../apis/ng-tapis-files-client';
 import {Observable, ReplaySubject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalPreviewComponent} from '../modal-preview/modal-preview.component';
+import { FormBuilder, FormGroup } from  '@angular/forms';
 import {filter, map} from 'rxjs/operators';
 
 @Component({
@@ -16,6 +17,8 @@ export class DataBrowserComponent implements OnInit {
 
   constructor(private fileOpsService: FileOperationsService,
               private systemsService: SystemsService,
+              private contentService: ContentService,
+              private formBuilder: FormBuilder,
               private modalService: NgbModal) {}
 
   private listing: ReplaySubject<Array<FileInfo>> = new ReplaySubject<Array<FileInfo>>(1);
@@ -27,7 +30,9 @@ export class DataBrowserComponent implements OnInit {
   public readonly systemsListing$: Observable<Array<TSystem>> = this.systemsListing.asObservable();
   public selectedFile: FileInfo;
   private currentPath: string;
-  private lastPath: string;
+  form: FormGroup;
+  error: string;
+  uploadResponse: UploadResponse;
 
 
 
@@ -45,8 +50,11 @@ export class DataBrowserComponent implements OnInit {
       this.activeSystem = next;
       this.listing.next([]);
       this.currentPath = '';
-      this.lastPath = '';
       this.browseFolder(this.currentPath);
+    });
+
+    this.form = this.formBuilder.group({
+      avatar: ['']
     });
   }
 
@@ -70,6 +78,13 @@ export class DataBrowserComponent implements OnInit {
     modalRef.componentInstance.system = this.activeSystem;
   }
 
+  download(): void {
+    this.contentService.filesGetContents(this.activeSystem.id, this.selectedFile.path)
+      .subscribe( (data: any) => {
+        this.browseFolder(this.currentPath);
+      });
+  }
+
   delete(): void {
     this.fileOpsService._delete(this.activeSystem.id, this.selectedFile.path)
       .subscribe( (resp) => {
@@ -88,6 +103,32 @@ export class DataBrowserComponent implements OnInit {
   moveUp(): void {
     this.currentPath = this.currentPath.slice(0,this.currentPath.lastIndexOf('/'));
     this.browseFolder(this.currentPath);
+  }
+
+
+  testRename(): void {
+    this.fileOpsService.rename(this.activeSystem.id, this.selectedFile.path, 'testName')
+    .subscribe( (resp) => {
+    this.browseFolder(this.currentPath);
+  });
+  }
+
+  onFileChange(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.form.get('avatar').setValue(file);
+    }
+  }
+
+
+  onSubmit() {
+    const formData = new FormData();
+    formData.append('file', this.form.get('avatar').value);
+
+    this.fileOpsService.insert(this.activeSystem.id, this.currentPath, undefined, formData).subscribe(
+      (res) => this.uploadResponse = res,
+      (err) => this.error = err
+    );
   }
 
 

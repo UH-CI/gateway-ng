@@ -13,3 +13,4 @@ export * from './tapisResponse';
 export * from './transferTask';
 export * from './transferTaskRequest';
 export * from './transferTaskResponse';
+export * from './uploadResponse'

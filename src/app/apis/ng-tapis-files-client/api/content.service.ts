@@ -131,7 +131,7 @@ export class ContentService {
             responseType = 'text';
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}/${encodeURIComponent(String(path))}`,
+        return this.httpClient.get<any>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}${encodeURIComponent(String(path)).replace(/%2F/g,"/")}`,
             {
                 responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,

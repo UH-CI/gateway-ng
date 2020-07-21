@@ -139,7 +139,7 @@ export class FileOperationsService {
             responseType = 'text';
         }
 
-        return this.httpClient.delete<FileStringResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}/${encodeURIComponent(String(path))}`,
+        return this.httpClient.delete<FileStringResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}${encodeURIComponent(String(path)).replace(/%2F/g,"/")}`,
             {
                 responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
@@ -160,10 +160,10 @@ export class FileOperationsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insert(systemId: string, path: string, xMeta?: string, file?: FormDataContentDisposition, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*'}): Observable<FileStringResponse>;
-    public insert(systemId: string, path: string, xMeta?: string, file?: FormDataContentDisposition, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*'}): Observable<HttpResponse<FileStringResponse>>;
-    public insert(systemId: string, path: string, xMeta?: string, file?: FormDataContentDisposition, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*'}): Observable<HttpEvent<FileStringResponse>>;
-    public insert(systemId: string, path: string, xMeta?: string, file?: FormDataContentDisposition, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*'}): Observable<any> {
+    public insert(systemId: string, path: string, xMeta?: string, file?: any, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*'}): Observable<FileStringResponse>;
+    public insert(systemId: string, path: string, xMeta?: string, file?: any, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*'}): Observable<HttpResponse<FileStringResponse>>;
+    public insert(systemId: string, path: string, xMeta?: string, file?: any, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*'}): Observable<HttpEvent<FileStringResponse>>;
+    public insert(systemId: string, path: string, xMeta?: string, file?: any, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*'}): Observable<any> {
         if (systemId === null || systemId === undefined) {
             throw new Error('Required parameter systemId was null or undefined when calling insert.');
         }
@@ -172,9 +172,6 @@ export class FileOperationsService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMeta !== undefined && xMeta !== null) {
-            headers = headers.set('x-meta', String(xMeta));
-        }
 
         let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (httpHeaderAcceptSelected === undefined) {
@@ -192,11 +189,11 @@ export class FileOperationsService {
         const consumes: string[] = [
             'multipart/form-data'
         ];
-
+/* 
         const canConsumeForm = this.canConsumeForm(consumes);
 
         let formParams: { append(param: string, value: any): any; };
-        let useForm = false;
+        let useForm = true;
         let convertFormParamsToString = false;
         if (useForm) {
             formParams = new FormData();
@@ -206,19 +203,18 @@ export class FileOperationsService {
 
         if (file !== undefined) {
             formParams = formParams.append('file', useForm ? new Blob([JSON.stringify(file)], {type: 'application/json'}) : <any>file) as any || formParams;
-        }
+        } */
 
         let responseType: 'text' | 'json' = 'json';
         if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
             responseType = 'text';
         }
 
-        return this.httpClient.post<FileStringResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}/${encodeURIComponent(String(path))}`,
-            convertFormParamsToString ? formParams.toString() : formParams,
+        return this.httpClient.post<any>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}${encodeURIComponent(String(path)).replace(/%2F/g,"/")}`,
+            file,
             {
                 responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
-                headers: headers,
                 observe: observe,
                 reportProgress: reportProgress
             }
@@ -317,10 +313,10 @@ export class FileOperationsService {
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
-        if (newName !== undefined && newName !== null) {
+/*         if (newName !== undefined && newName !== null) {
           queryParameters = this.addToHttpParams(queryParameters,
             <any>newName, 'newName');
-        }
+        } */
 
         let headers = this.defaultHeaders;
 
@@ -341,9 +337,13 @@ export class FileOperationsService {
         if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
             responseType = 'text';
         }
+        let data = {
+            action: 'rename',
+            path: newName
+        }
 
-        return this.httpClient.put<FileStringResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}/${encodeURIComponent(String(path))}`,
-            null,
+        return this.httpClient.put<FileStringResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}${encodeURIComponent(String(path)).replace(/%2F/g,"/")}`,
+            data,
             {
                 params: queryParameters,
                 responseType: <any>responseType,
