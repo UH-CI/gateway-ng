@@ -7,6 +7,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalPreviewComponent} from '../modal-preview/modal-preview.component';
 import { FormBuilder, FormGroup } from  '@angular/forms';
 import {filter, map} from 'rxjs/operators';
+import { MatIcon } from '@angular/material/icon'
 
 @Component({
   selector: 'app-data-browser',
@@ -39,7 +40,7 @@ export class DataBrowserComponent implements OnInit {
   ngOnInit(): void {
     this.systemsService.getSystems()
       .subscribe( (resp) => {
-        const systems = resp.result  //.filter( (s) => !s.jobCanExec); v3 jobCanExec
+        const systems = resp.result.filter( (s) => !s.available);
         this.systemsListing.next(systems);
         this.activeSystemSubject.next(systems[0]);
     }, (error) => {
@@ -80,11 +81,33 @@ export class DataBrowserComponent implements OnInit {
   }
 
   download(): void {
+    let filename = this.selectedFile.name;
     this.contentService.filesGetContents(this.activeSystem.id, this.selectedFile.path)
-      .subscribe( (data: any) => {
-        this.browseFolder(this.currentPath);
+      .subscribe( (response) => { 
+        console.log(response);
+        this.downLoadFile(response, filename);
       });
   }
+
+  downLoadFile(data: Blob, filename: string) {
+    let blob = data;
+
+    //For IE explorer
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob);
+      return;
+    }
+
+    
+    const datafile = window.URL.createObjectURL(blob);
+
+    var link = document.createElement('a');
+            link.href = datafile;
+            link.download = filename;
+            // this is necessary as link.click() does not work on the latest firefox
+            link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+}
 
   delete(): void {
     this.fileOpsService._delete(this.activeSystem.id, this.selectedFile.path)
@@ -94,7 +117,7 @@ export class DataBrowserComponent implements OnInit {
   }
 
   selectFile(file: FileInfo): void {
-    if (file.format == 'folder') {
+    if (file.format == 'folder' && this.selectedFile == file) {
       this.currentPath = file.path;
       this.browseFolder(this.currentPath);
     } 

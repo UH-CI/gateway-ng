@@ -1,5 +1,13 @@
 :host {
   max-height: 10em;
+  table {
+    border-collapse: collapse;
+    display: block;
+  }
+
+  tr {
+    border: 1px solid rgb(255, 0, 0, 0.0);
+  }
   .tapis-file-name {
     color: #9d85ef;
   }
@@ -15,9 +23,9 @@
   }
 
   .selected-file {
-    border-left: 6px solid red;
+    border: 1px solid rgb(255, 0, 0);
+    background: rgb(190, 190, 190);
   }
-
 
 
 }

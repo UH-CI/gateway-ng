@@ -36,8 +36,8 @@
         <tbody>
           <tr *ngFor="let file of listing$ | async " (click)="selectFile(file)" class="clickable" [ngClass]="{'selected-file': file === selectedFile }">
             <td>
-              <i *ngIf="file.format == 'folder'" class="far fa-folder-open fa-fw"></i>
-              <i *ngIf="file.format != 'folder'" class="far fa-file fa-fw"> </i>
+              <i *ngIf="file.format == 'folder'" class="far fa-folder-open fa-fw"><mat-icon aria-hidden="false" aria-label="Folder Icon">folder</mat-icon></i>
+              <i *ngIf="file.format != 'folder'" class="far fa-file fa-fw"> <mat-icon aria-hidden="false" aria-label="File icon">text_snippet</mat-icon></i>
               <span class="tapis-file-name clickable" (click)="preview(file)">{{ file.name }} </span>
             </td>
             <td>

@@ -113,8 +113,10 @@ export class ContentService {
         if (more !== undefined && more !== null) {
             headers = headers.set('more', String(more));
         }
+        
+        headers = headers.set('Content-Type', 'application/octet-stream');
 
-        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+/*         let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (httpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
@@ -123,13 +125,10 @@ export class ContentService {
         }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
+        } */
 
 
-        let responseType: 'text' | 'json' = 'json';
-        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
-            responseType = 'text';
-        }
+        let responseType =  'blob';
 
         return this.httpClient.get<any>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}${encodeURIComponent(String(path)).replace(/%2F/g,"/")}`,
             {
