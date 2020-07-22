@@ -11,6 +11,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button'
+import { MatDialogModule } from '@angular/material/dialog'
+import { FlexLayoutModule } from '@angular/flex-layout'
+import { CommonModule } from '@angular/common'
+import { MatGridListModule } from '@angular/material/grid-list'
+import { FormsModule } from '@angular/forms'
+import { MatInputModule } from '@angular/material/input'
+import { MatMenuModule } from '@angular/material/menu'
+import {MatSelectModule} from '@angular/material/select';
 
 import { SidenavServiceService } from './sidenav-service.service';
 import { HomepageComponent } from './homepage/homepage.component';
@@ -39,6 +48,10 @@ import {environment} from '../environments/environment';
 import { MainComponent } from './components/main/main.component';
 import {ApiModule as FilesClient} from './apis/ng-tapis-files-client';
 import {ApiModule as SystemsClient, Configuration} from './apis/ng-tapis-systems-client';
+import { FileExplorerComponent } from './components/file-explorer/file-explorer.component';
+import { NewFolderDialogComponent } from './components/modals/new-folder-dialog/new-folder-dialog.component';
+import { RenameDialogComponent } from './components/modals/rename-dialog/rename-dialog.component';
+import { FileUploadDialogComponent } from './components/modals/file-upload-dialog/file-upload-dialog.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -58,7 +71,11 @@ export function initializeApp(appConfig: AppConfig) {
     ModalPreviewComponent,
     SecuredImageComponent,
     SecuredTextComponent,
-    DataBrowserComponent
+    DataBrowserComponent,
+    FileExplorerComponent,
+    NewFolderDialogComponent,
+    RenameDialogComponent,
+    FileUploadDialogComponent
   ],
   imports: [
     FilesClient.forRoot((): Configuration => new Configuration({basePath: environment.baseUrl})),
@@ -76,7 +93,16 @@ export function initializeApp(appConfig: AppConfig) {
     AppRoutingModule,
     NgHttpLoaderModule.forRoot(),
     NgxFilesizeModule,
-    NgbModule
+    NgbModule,
+    CommonModule,
+    FlexLayoutModule,
+    MatGridListModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatSelectModule
   ],
   providers: [
     SidenavServiceService,
