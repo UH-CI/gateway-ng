@@ -1,12 +1,12 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit, NgModule } from '@angular/core'
 import { FileInfo } from '../../apis/ng-tapis-files-client';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { NewFolderDialogComponent } from '../modals/new-folder-dialog/new-folder-dialog.component';
-import { RenameDialogComponent } from '../modals/rename-dialog/rename-dialog.component';
-import { FileUploadDialogComponent } from '../modals/file-upload-dialog/file-upload-dialog.component';
-
+import { NewFolderDialogComponent } from '../../file-browser/modals/new-folder-dialog/new-folder-dialog.component';
+import { RenameDialogComponent } from '../../file-browser/modals/rename-dialog/rename-dialog.component';
+import { FileUploadDialogComponent } from '../../file-browser/modals/file-upload-dialog/file-upload-dialog.component';
+import { CommonModule } from '@angular/common';
 import {FileOperationsService, ContentService, UploadResponse } from '../../apis/ng-tapis-files-client';
 import {SystemsService, TSystem} from '../../apis/ng-tapis-systems-client';
 import {Observable, ReplaySubject} from 'rxjs';
@@ -21,6 +21,7 @@ import { FormBuilder, FormGroup } from  '@angular/forms';
   templateUrl: './file-explorer.component.html',
   styleUrls: ['./file-explorer.component.css']
 })
+
 export class FileExplorerComponent implements OnInit {
 
   @Input() fileElements: FileInfo[]
@@ -38,6 +39,7 @@ export class FileExplorerComponent implements OnInit {
   @Output() navigatedUp = new EventEmitter()
 
   
+
   constructor(public dialog: MatDialog,
               private fileOpsService: FileOperationsService,
               private systemsService: SystemsService,
@@ -232,6 +234,10 @@ export class FileExplorerComponent implements OnInit {
     let dialogRef = this.dialog.open(NewFolderDialogComponent);
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
+        this.fileOpsService.newFolder(this.activeSystem.id, this.currentPath, res)
+          .subscribe( (resp) => {
+          this.browseFolder(this.currentPath);
+        });
         this.folderAdded.emit({ name: res });
       }
     });
@@ -252,8 +258,7 @@ export class FileExplorerComponent implements OnInit {
     dialogRef.afterClosed().subscribe(res => {
       this.fileOpsService.insert(this.activeSystem.id, this.currentPath, undefined, res).subscribe(
         (res) => {
-          this.uploadResponse = res
-          this.browseFolder(this.currentPath);
+          console.log(res);
         },
         (err) => this.error = err
       );

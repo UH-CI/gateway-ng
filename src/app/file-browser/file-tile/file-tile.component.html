@@ -1,30 +1,3 @@
-<div>
-
-<mat-form-field appearance="fill">
-  <mat-label>Select System</mat-label>
-  <mat-select [ngModel]="activeSystem" (ngModelChange)="onChange($event)">
-    <mat-option *ngFor="let system of systemsListing$ | async" [value]="system">
-      {{system.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
-</div>
-
-<mat-toolbar>
-  <mat-icon *ngIf="canNavigateUp > 0" class="pointer" (click)="navigateUp()">
-    arrow_back
-  </mat-icon>
-  <span style="margin-left: 8px"> {{path || 'Files'}} </span>
-  <span class="spacer"></span>
-  <mat-icon class="pointer" (click)="openNewFolderDialog()">
-    create_new_folder
-  </mat-icon>
-  <mat-icon class="pointer" (click)="openFileUploadDialog()">
-    cloud_upload
-  </mat-icon>
-</mat-toolbar>
-
 <div
   class="container"
   fxFlex
@@ -32,9 +5,9 @@
   fxLayoutAlign="space-between stretch"
 >
   <div class="content" fxFlex fxLayout="row">
-    <mat-grid-list cols="8" rowHeight="100px" fxFlex>
+    <mat-grid-list cols="15" rowHeight="100px" fxFlex>
       <mat-grid-tile
-        *ngFor="let element of listing$ | async"
+        *ngFor="let element of fileElements"
         class="file-or-folder"
       >
         <span
@@ -44,22 +17,25 @@
         >
         </span>
         <div
+          #file
           fxLayout="column"
           fxLayoutAlign="space-between center"
-          (click)="selectFile(element)"
+          (click)="selectFile(element, $event)"
           (contextmenu)="openMenu($event, element, menuTrigger)"
         >
           <mat-icon
             color="primary"
             class="file-or-folder-icon pointer"
             *ngIf="element.format == 'folder'"
-          >
+            [ngClass]="isSelected(element) ? 'selected-file' :'' "
+                      >
             folder
           </mat-icon>
           <mat-icon
             color="primary"
             class="file-or-folder-icon pointer"
             *ngIf="element.format !== 'folder'"
+            [ngClass]="isSelected(element) ? 'selected-file' :'' "
           >
             insert_drive_file
           </mat-icon>
@@ -85,7 +61,7 @@
       <mat-icon>edit</mat-icon>
       <span>Rename</span>
     </button>
-    <button mat-menu-item *ngIf="element.format !== 'folder'"   (click)="downloadElement(element)">
+    <button mat-menu-item *ngIf="element.format !== 'folder'"   (click)="download(element)">
       <mat-icon>cloud_download</mat-icon>
       <span>Download</span>
     </button>
@@ -100,7 +76,7 @@
   <ng-template matMenuContent let-self="self">
     <ng-container *ngFor="let element of fileElements">
       <button
-        *ngIf="element.isFolder && element.id !== self.id"
+        *ngIf="element.format == 'folder' && element.path !== self.path"
         mat-menu-item
         (click)="moveElement(self, element)"
       >

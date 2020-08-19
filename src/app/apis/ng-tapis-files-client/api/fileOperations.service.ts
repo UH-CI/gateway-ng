@@ -371,4 +371,54 @@ export class FileOperationsService {
         );
     }
 
+    public newFolder(systemId: string, path: string, name: string,  observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
+        if (systemId === null || systemId === undefined) {
+            throw new Error('Required parameter systemId was null or undefined when calling rename.');
+        }
+        if (path === null || path === undefined) {
+            throw new Error('Required parameter path was null or undefined when calling rename.');
+        }
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter newName was null or undefined when calling rename.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+
+        let headers = this.defaultHeaders;
+
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+        let data = {
+            action: 'mkdir',
+            path: name,
+        }
+
+        return this.httpClient.put<FileStringResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}${encodeURIComponent(String(path)).replace(/%2F/g,"/")}`,
+            data,
+            {
+                params: queryParameters,
+                responseType: <any>responseType,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
 }

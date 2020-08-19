@@ -24,5 +24,6 @@ export interface FileInfo {
     type?: string;
     system?: string,
     _links?: respLinks;
+    selected?: boolean;
 }
 

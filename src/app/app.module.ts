@@ -20,10 +20,9 @@ import { FormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
 import { MatMenuModule } from '@angular/material/menu'
 import {MatSelectModule} from '@angular/material/select';
-
+import { MatTableModule } from '@angular/material/table';
 import { SidenavServiceService } from './sidenav-service.service';
 import { HomepageComponent } from './homepage/homepage.component';
-import { FilemanagerComponent } from './filemanager/filemanager.component';
 import { FooterComponent } from './footer/footer.component';
 
 
@@ -42,6 +41,7 @@ import { ModalPreviewComponent } from './components/modal-preview/modal-preview.
 import { SecuredImageComponent } from './components/secured-image/secured-image.component';
 import { SecuredTextComponent } from './components/secured-text/secured-text.component';
 
+
 import { FileManagerAllModule } from '@syncfusion/ej2-angular-filemanager';
 import { LoginComponent } from './login/login.component';
 import {environment} from '../environments/environment';
@@ -49,9 +49,13 @@ import { MainComponent } from './components/main/main.component';
 import {ApiModule as FilesClient} from './apis/ng-tapis-files-client';
 import {ApiModule as SystemsClient, Configuration} from './apis/ng-tapis-systems-client';
 import { FileExplorerComponent } from './components/file-explorer/file-explorer.component';
-import { NewFolderDialogComponent } from './components/modals/new-folder-dialog/new-folder-dialog.component';
-import { RenameDialogComponent } from './components/modals/rename-dialog/rename-dialog.component';
-import { FileUploadDialogComponent } from './components/modals/file-upload-dialog/file-upload-dialog.component';
+import { NewFolderDialogComponent } from './file-browser/modals/new-folder-dialog/new-folder-dialog.component';
+import { RenameDialogComponent } from './file-browser/modals/rename-dialog/rename-dialog.component';
+import { FileUploadDialogComponent } from './file-browser/modals/file-upload-dialog/file-upload-dialog.component';
+import { FileBrowserComponent } from './file-browser/file-browser.component';
+import { FileListComponent } from './file-browser/file-list/file-list.component';
+import { FileTileComponent } from './file-browser/file-tile/file-tile.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -64,7 +68,6 @@ export function initializeApp(appConfig: AppConfig) {
     SidenavComponent,
     HomepageComponent,
     MainComponent,
-    FilemanagerComponent,
     FooterComponent,
     LoginComponent,
     FileListingRowComponent,
@@ -75,7 +78,10 @@ export function initializeApp(appConfig: AppConfig) {
     FileExplorerComponent,
     NewFolderDialogComponent,
     RenameDialogComponent,
-    FileUploadDialogComponent
+    FileUploadDialogComponent,
+    FileBrowserComponent,
+    FileListComponent,
+    FileTileComponent
   ],
   imports: [
     FilesClient.forRoot((): Configuration => new Configuration({basePath: environment.baseUrl})),
@@ -87,6 +93,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatToolbarModule,
     MatIconModule,
     MatListModule,
+    MatTableModule,
     FileManagerAllModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -102,7 +109,9 @@ export function initializeApp(appConfig: AppConfig) {
     MatInputModule,
     FormsModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule
+
   ],
   providers: [
     SidenavServiceService,

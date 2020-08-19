@@ -1,0 +1,29 @@
+
+<mat-table [dataSource]="fileElements" class="mat-elevation-z8">
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>Select</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <mat-checkbox
+                [checked]="isSelected(element)"
+                (change)="checkSelect($event.checked, element)"
+            ></mat-checkbox>
+            <mat-icon class="icon" *ngIf="element.format == 'folder'">folder</mat-icon>
+            <mat-icon *ngIf="element.format !== 'folder'">insert_drive_file</mat-icon>
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="length">
+        <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.length }} KB</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="lastModified">
+        <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.lastModified }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="tableCols"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableCols"></mat-row>
+</mat-table>
