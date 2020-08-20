@@ -2,9 +2,9 @@
 <mat-table [dataSource]="fileElements" class="mat-elevation-z8">
     <ng-container matColumnDef="select">
         <mat-header-cell *matHeaderCellDef>Select</mat-header-cell>
-        <mat-cell *matCellDef="let element">
+        <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">
             <mat-checkbox
-                [checked]="isSelected(element)"
+                [checked]="element.selected"
                 (change)="checkSelect($event.checked, element)"
             ></mat-checkbox>
             <mat-icon class="icon" *ngIf="element.format == 'folder'">folder</mat-icon>
@@ -13,17 +13,67 @@
     </ng-container>
     <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+        <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">{{ element.name }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="length">
         <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.length }} KB</mat-cell>
+        <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">{{ element.length }} KB</mat-cell>
     </ng-container>
     <ng-container matColumnDef="lastModified">
         <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.lastModified }}</mat-cell>
+        <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">{{ element.lastModified }}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="tableCols"></mat-header-row>
     <mat-row *matRowDef="let row; columns: tableCols"></mat-row>
 </mat-table>
+
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="rootMenu"
+    #menuTrigger="matMenuTrigger">
+</div>
+
+<mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
+  <ng-template matMenuContent let-element="element">
+    <button mat-menu-item (click)="navigate(element)">
+      <mat-icon>folder_open</mat-icon>
+      <span>Open</span>
+    </button>
+    <button
+      mat-menu-item
+      [matMenuTriggerFor]="moveToMenu"
+      [matMenuTriggerData]="{self: element}"
+    >
+      <mat-icon>open_with</mat-icon>
+      <span>Move To</span>
+    </button>
+    <button mat-menu-item (click)="openRenameDialog(element)">
+      <mat-icon>edit</mat-icon>
+      <span>Rename</span>
+    </button>
+    <button mat-menu-item *ngIf="element.format !== 'folder'"   (click)="download(element)">
+      <mat-icon>cloud_download</mat-icon>
+      <span>Download</span>
+    </button>
+    <button mat-menu-item (click)="deleteElement(element)">
+      <mat-icon>delete</mat-icon>
+      <span>Delete</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #moveToMenu="matMenu">
+  <ng-template matMenuContent let-self="self">
+    <ng-container *ngFor="let element of fileElements">
+      <button
+        *ngIf="element.format == 'folder' && element.path !== self.path"
+        mat-menu-item
+        (click)="moveElement(self, element)"
+      >
+        {{element.name}}
+      </button>
+    </ng-container>
+  </ng-template>
+</mat-menu>

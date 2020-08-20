@@ -13,6 +13,7 @@ import { NewFolderDialogComponent } from './modals/new-folder-dialog/new-folder-
 import { RenameDialogComponent } from './modals/rename-dialog/rename-dialog.component';
 import { FileUploadDialogComponent } from './modals/file-upload-dialog/file-upload-dialog.component';
 import { FileTileComponent } from './file-tile/file-tile.component';
+import { MoveDialogComponent } from './modals/move-dialog/move-dialog.component';
 
 @Component({
   selector: 'app-file-browser',
@@ -36,15 +37,13 @@ export class FileBrowserComponent implements OnInit {
   public readonly systemsListing$: Observable<Array<TSystem>> = this.systemsListing.asObservable();
   error: string;
   uploadResponse: UploadResponse;
+  public activeFiles: FileInfo[];
   
-  fileElements: Observable<FileInfo[]>;
-  currentRoot: FileInfo;
   currentPath: string;
   canNavigateUp: number;
   view: string;
   numSelected: number;
-  timeout: number;
-  timedout: boolean;
+
 
   ngOnInit(): void {
     this.view = 'tile';
@@ -69,8 +68,6 @@ export class FileBrowserComponent implements OnInit {
     );
     this.uploadResponse = { status: ''}
     this.numSelected = 0;
-    this.timeout = 0;
-    this.timedout = false;
   }
 
   onChange(newValue): void {
@@ -82,12 +79,13 @@ export class FileBrowserComponent implements OnInit {
   }
 
   refresh(files: FileInfo[]): void {
-    this.listing.next(files);
-    this.fileElements = this.listing.asObservable();
+    this.activeFiles = files;
+    this.listing.next(this.activeFiles);
   }
 
   totalRefresh(): void {
-
+    this.clearSelected();
+    this.browseFolder(this.currentPath);
   }
 
   browseFolder(path: string) {
@@ -97,15 +95,12 @@ export class FileBrowserComponent implements OnInit {
       .subscribe( 
         (resp) => {
           resp.result.shift();
-          this.refresh(resp.result);
-          this.timeout = 0;
+          this.activeFiles = resp.result;
+          this.clearSelected();
         }, (err) => {
           this.error = err;
-          this.timeout++;
-          if (this.timeout <= 3) {
-            this.browseFolder(this.currentPath);
-          } else this.timedout = false;
           console.log(err);
+          if (err.status == 404) console.log('404 error')
         }
       );
   }
@@ -120,14 +115,8 @@ export class FileBrowserComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(
         (res) => {
-          if (res) {
-            this.fileOpsService.newFolder(this.activeSystem.id, this.currentPath, res)
-              .subscribe( (resp) => {
-                this.browseFolder(this.currentPath);
-              }
-            );
-          }
-       }
+          this.addFolder(res);
+        }
       );
   }
 
@@ -144,15 +133,31 @@ export class FileBrowserComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(
         (res) => {
-          this.fileOpsService.insert(this.activeSystem.id, this.currentPath, undefined, res)
-            .subscribe(
-              (res) => {
-                this.uploadResponse = res
-                this.browseFolder(this.currentPath);
-              }, (err) => this.error = err
-            );
+          if(res !== '') this.uploadFile(res);
         }
       );
+  }
+
+  openMoveDialog() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    dialogConfig.data = {
+        system: this.activeSystem,
+        path: this.currentPath
+    };
+
+    let dialogRef = this.dialog2.open(MoveDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(res => {
+      this.fileOpsService.insert(this.activeSystem.id, this.currentPath, undefined, res).subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (err) => this.error = err
+      );
+    });
   }
 
 
@@ -169,13 +174,23 @@ export class FileBrowserComponent implements OnInit {
       this.view = view;
   }
 
+  //delete called in recursive lacks the response to speed up the delete
   delete(element: FileInfo) {
     this.fileOpsService._delete(this.activeSystem.id, element.path)
       .subscribe( 
         (resp) => {
-          this.browseFolder(this.currentPath);
         }
       );
+  }
+
+  deleteOne(element: FileInfo) {
+    this.fileOpsService._delete(this.activeSystem.id, element.path)
+    .subscribe( 
+      (resp) => {
+        this.browseFolder(this.currentPath);
+      }
+    );
+    
   }
 
   rename( element: {file: FileInfo, name: string }) {
@@ -185,6 +200,28 @@ export class FileBrowserComponent implements OnInit {
           this.browseFolder(this.currentPath);
         }
       );
+  }
+
+
+  recursiveDelete(): void {
+    if (confirm('Are you sure you want to delete selected files?')) {
+      this.activeFiles.forEach( 
+        (value) => {
+          if(value.selected) this.delete(value);
+        }
+      )
+      this.activeFiles = this.activeFiles.filter( file => file.selected == false);
+      this.listing.next(this.activeFiles)
+    }
+  }
+
+  recursiveDownload(): void {
+    this.activeFiles.forEach( 
+      (value) => {
+        if(value.selected && value.format !== 'folder') this.downloadElement(value);
+      }
+    )
+    this.clearSelected();
   }
 
   moveTo( element: any) {
@@ -243,67 +280,60 @@ export class FileBrowserComponent implements OnInit {
   }
 
   toggleSelect(file: FileInfo): void {
-    this.fileElements
-      .subscribe( 
-        (resp) => {
-          for (let a of resp) {
-            if (a.name = file.name) {
-              if (a.selected == true) this.numSelected--;
-              else this.numSelected++;
-              a.selected = !a.selected;
-              break;
-            }
-          }
-          this.refresh(resp);
-        }, (err) => this.error = err
-      );
+    if (file.selected == true) this.numSelected--;
+    else this.numSelected++;
+    file.selected = !file.selected;
+    console.log(this.numSelected);
+/*     for (let a of this.activeFiles) {
+      if (a.selected == undefined) a.selected = false
+      if (a.name == file.name) {
+        if (a.selected == true) this.numSelected--;
+        else this.numSelected++;
+        a.selected = !a.selected;
+        break;
+      }
+    } */
   }
 
   clearSelected(): void {
-    this.fileElements
-      .subscribe( 
-        (resp) => {
-          resp.forEach( 
-            function (value) { 
-              value.selected = false 
-            }
-          )
-          this.refresh(resp);
-          this.numSelected = 0;
-        }, (err) => this.error = err
-      );
+    this.activeFiles.forEach( 
+      function (value) { 
+        value.selected = false 
+      }
+    )
+    this.listing.next(this.activeFiles);
+    this.numSelected = 0
   }
 
   leftSelect(file: FileInfo): void {
+    console.log(this.numSelected);
     if (file.format == 'folder' && file.selected && this.numSelected == 1) {
       this.navigateDown(file);
     } else if(this.numSelected == 1 && file.selected) {
       this.toggleSelect(file);
-    } else if (this.numSelected > 1) {
+    } else if (this.numSelected == 0) this.toggleSelect(file); 
+    else {
       this.clearSelected();
-      file.selected = true;
-    }
+      this.toggleSelect(file);
+    } 
   }
 
   shiftSelect(file: FileInfo): void {
-    this.fileElements
-    .subscribe( 
-      (resp) => {
-        let index = resp.map( e => e.name).indexOf(file.name);
-        let startindex = resp.map( e => e.selected).indexOf(true);
-        if (startindex > index) {
-          let temp = startindex;
-          startindex = index;
-          index = temp;
-        }
-        this.numSelected = this.numSelected + (index - startindex + 1)
-        for(var i = startindex; i <= index; i++) {
-          if (resp[i].selected == true) this.numSelected--;
-          resp[i].selected = true;
-        }
-        this.refresh(resp);
-      }, (err) => this.error = err
-    );
+    let index = this.activeFiles.map( e => e.name).indexOf(file.name);
+    let startindex = this.activeFiles.map( e => e.selected).indexOf(true);
+    if (startindex > index) {
+      let temp = startindex;
+      startindex = index;
+      index = temp;
+    }
+    if (startindex == -1) startindex = 1;
+    if (index == -1) index = 1;
+    this.numSelected = this.numSelected + (index - startindex + 1)
+    for(var i = startindex; i <= index; i++) {
+      if (this.activeFiles[i].selected == true) this.numSelected--;
+      this.activeFiles[i].selected = true;
+    }
+    this.listing.next(this.activeFiles);
   }
 
   ctrlSelect(file: FileInfo): void {

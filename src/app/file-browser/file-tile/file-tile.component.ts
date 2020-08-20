@@ -59,20 +59,10 @@ export class FileTileComponent implements OnInit {
     this.selectedFile = [{ name: '.'}];
   }
 
-  isSelected(element) {
-    let value = false
-    if(this.selectedFile !== undefined) {
-      value = (this.selectedFile.filter( e => e.name === element.name).length > 0);
-    }
-    return value;
-  }
-
-  selectFile(file: FileInfo, event: MouseEvent): void {    
-    if(event.ctrlKey) {
-      this.ctrlClickFile.emit(file);
-    } else if (event.shiftKey){
-      this.shiftClickFile.emit(file);
-    } else this.leftClickFile.emit(file);
+  clickFile(element: FileInfo, event: MouseEvent): void {
+    if(event.shiftKey) this.shiftClickFile.emit(element);
+    else if (event.ctrlKey) this.ctrlClickFile.emit(element);
+    else this.leftClickFile.emit(element);
   }
 
   openMenu(event: MouseEvent, element: FileInfo, viewChild: MatMenuTrigger) {

@@ -20,14 +20,14 @@
           #file
           fxLayout="column"
           fxLayoutAlign="space-between center"
-          (click)="selectFile(element, $event)"
+          (click)="clickFile(element, $event)"
           (contextmenu)="openMenu($event, element, menuTrigger)"
         >
           <mat-icon
             color="primary"
             class="file-or-folder-icon pointer"
             *ngIf="element.format == 'folder'"
-            [ngClass]="isSelected(element) ? 'selected-file' :'' "
+            [ngClass]="element.selected ? 'selected-file' :'' "
                       >
             folder
           </mat-icon>
@@ -35,7 +35,7 @@
             color="primary"
             class="file-or-folder-icon pointer"
             *ngIf="element.format !== 'folder'"
-            [ngClass]="isSelected(element) ? 'selected-file' :'' "
+            [ngClass]="element.selected ? 'selected-file' :'' "
           >
             insert_drive_file
           </mat-icon>
@@ -49,6 +49,10 @@
 
 <mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
   <ng-template matMenuContent let-element="element">
+    <button mat-menu-item (click)="navigate(element)">
+      <mat-icon>folder_open</mat-icon>
+      <span>Open</span>
+    </button>
     <button
       mat-menu-item
       [matMenuTriggerFor]="moveToMenu"

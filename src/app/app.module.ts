@@ -56,6 +56,7 @@ import { FileBrowserComponent } from './file-browser/file-browser.component';
 import { FileListComponent } from './file-browser/file-list/file-list.component';
 import { FileTileComponent } from './file-browser/file-tile/file-tile.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MoveDialogComponent } from './file-browser/modals/move-dialog/move-dialog.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -81,7 +82,8 @@ export function initializeApp(appConfig: AppConfig) {
     FileUploadDialogComponent,
     FileBrowserComponent,
     FileListComponent,
-    FileTileComponent
+    FileTileComponent,
+    MoveDialogComponent
   ],
   imports: [
     FilesClient.forRoot((): Configuration => new Configuration({basePath: environment.baseUrl})),

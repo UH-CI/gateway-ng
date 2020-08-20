@@ -41,7 +41,6 @@ export class FileUploadDialogComponent implements OnInit {
     }
   }
 
-
   onSubmit() {
     const formData = new FormData();
     formData.append('fileToUpload', this.form.get('file').value);

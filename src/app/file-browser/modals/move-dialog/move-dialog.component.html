@@ -1,0 +1,47 @@
+<mat-form-field appearance="fill">
+  <mat-label>Select System</mat-label>
+  <mat-select [ngModel]="activeSystem" (ngModelChange)="onChange($event)">
+    <mat-option *ngFor="let system of systemsListing$ | async" [value]="system">
+      {{system.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-toolbar>
+  <mat-icon *ngIf="canNavigateUp > 0" class="pointer" (click)="navigateUp()">
+    arrow_back
+  </mat-icon>
+  <span style="margin-left: 8px"> {{currentPath || 'Files'}} </span>
+</mat-toolbar>
+
+<mat-table [dataSource]="fileElements" class="mat-elevation-z8">
+    <ng-container matColumnDef="icon">
+        <mat-header-cell *matHeaderCellDef>Select</mat-header-cell>
+        <mat-cell *matCellDef="let element" *ngIf="element.format == 'folder'">
+            <mat-icon class="icon">folder</mat-icon>
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let element" *ngIf="element.format == 'folder'">{{ element.name }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="open">
+        <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+        <mat-cell *matCellDef="let element" *ngIf="element.format == 'folder'" >
+            <button (click)="open()"></button
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
+        <mat-cell *matCellDef="let element" *ngIf="element.format == 'folder'">
+            <button (click)="select()"></button
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="tableCols"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableCols"></mat-row>
+</mat-table>
+
+<mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

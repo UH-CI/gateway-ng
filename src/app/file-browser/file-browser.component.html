@@ -17,6 +17,15 @@
   </mat-icon>
   <span style="margin-left: 8px"> {{currentPath || 'Files'}} </span>
   <span class="spacer"></span>
+    <mat-icon class="pointer" (click)="totalRefresh()">
+    refresh
+  </mat-icon>
+    <mat-icon class="pointer" (click)="recursiveDownload()">
+    cloud_download
+  </mat-icon>
+    <mat-icon class="pointer" (click)="recursiveDelete()">
+    delete
+  </mat-icon>
   <mat-icon class="pointer" (click)="changeView('list')">
     view_list
   </mat-icon>
@@ -29,12 +38,10 @@
   <mat-icon class="pointer" (click)="openFileUploadDialog()">
     cloud_upload
   </mat-icon>
-  <mat-icon class="pointer" (click)="totalRefresh()">
-    refresh
-  </mat-icon>
+
 </mat-toolbar>
 <app-file-tile
-    [fileElements] = "fileElements | async"
+    [fileElements] = "listing$ | async"
     [canNavigateUp] = "canNavigateUp"
     [path] = "currentPath"
     (folderAdded) = "addFolder($event)"
@@ -42,7 +49,7 @@
     (shiftClickFile) = "shiftSelect($event)"
     (ctrlClickFile) = "ctrlSelect($event)"
     (viewChanged) = "changeView($event)"
-    (elementRemoved) = "delete($event)"
+    (elementRemoved) = "deleteOne($event)"
     (elementRenamed) = "rename($event)"
     (elementMoved) = "moveTo($event)"
     (navigatedDown) = "navigateDown($event)"
@@ -51,13 +58,13 @@
     (navigatedUp) = "navigateUp()"
     *ngIf="view === 'tile'"></app-file-tile>
 <app-file-list 
-    [fileElements] = "fileElements | async"
+    [fileElements] = "listing$ | async"
     [canNavigateUp] = "canNavigateUp"
     [path] = "currentPath"
-    [listing] = "listing$ | async"
     (folderAdded) = "addFolder($event)"
+    (select) = "toggleSelect($event)"
     (viewChanged) = "changeView($event)"
-    (elementRemoved) = "delete($event)"
+    (elementRemoved) = "deleteOne($event)"
     (elementRenamed) = "rename($event)"
     (elementMoved) = "moveTo($event)"
     (navigatedDown) = "navigateDown($event)"

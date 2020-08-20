@@ -19,11 +19,10 @@ export class FileListComponent implements OnInit {
   @Input() fileElements: FileInfo[];
   @Input() canNavigateUp: number
   @Input() path: string
-  @Input() selectedFile: FileInfo[]
-  @Input() listing: Observable<any>;
 
 
   @Output() folderAdded = new EventEmitter<string>()
+  @Output() select = new EventEmitter<FileInfo>()
   @Output() viewChanged = new EventEmitter<string>()
   @Output() elementRemoved = new EventEmitter<FileInfo>()
   @Output() elementRenamed = new EventEmitter< { 
@@ -51,43 +50,27 @@ export class FileListComponent implements OnInit {
   tableDataSrc: any;
   tableCols: string[] = ['select','name','length','lastModified'];
 
+  contextMenuPosition = { x: '0px', y: '0px' };
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       file: ['']
     });
-    console.log(this.selectedFile);
     
   }
 
-  debug(): void {
-    console.log(this.listing);
-  }
-
-  reset(): void {
-    this.selectedFile = [{ name: '.'}];
-  }
-
-  isSelected(element) {
-    let value = false;
-    console.log(this.selectedFile);
-    if(this.selectedFile !== undefined) {
-      value = (this.selectedFile.filter( e => e.name === element.name).length > 0);
-    }
-    return value;
-  }
 
   checkSelect(checked: boolean, file: FileInfo) {
-    if(checked == true) {
-      this.selectedFile.push(file);
-    } else {
-      //this.selectedFile = this.selectedFile.filter( e => e.name !== file.name);
-    }
+    if(checked != file.selected) this.select.emit(file);
   }
 
 
   openMenu(event: MouseEvent, element: FileInfo, viewChild: MatMenuTrigger) {
     event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    viewChild.menuData = { 'element': element };
+    viewChild.menu.focusFirstItem('mouse');
     viewChild.openMenu();
   }
 
