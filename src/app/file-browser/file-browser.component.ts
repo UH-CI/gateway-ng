@@ -3,6 +3,7 @@ import { FileInfo } from '../apis/ng-tapis-files-client';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { MatSpinner } from '@angular/material/progress-spinner';
 
 import {FileOperationsService, ContentService, UploadResponse } from '../apis/ng-tapis-files-client';
 import {SystemsService, TSystem} from '../apis/ng-tapis-systems-client';
@@ -13,7 +14,9 @@ import { NewFolderDialogComponent } from './modals/new-folder-dialog/new-folder-
 import { RenameDialogComponent } from './modals/rename-dialog/rename-dialog.component';
 import { FileUploadDialogComponent } from './modals/file-upload-dialog/file-upload-dialog.component';
 import { FileTileComponent } from './file-tile/file-tile.component';
+import { FileMoveComponent } from './file-move/file-move.component';
 import { MoveDialogComponent } from './modals/move-dialog/move-dialog.component';
+import { TestDialogComponent } from './modals/test-dialog/test-dialog.component';
 
 @Component({
   selector: 'app-file-browser',
@@ -21,6 +24,10 @@ import { MoveDialogComponent } from './modals/move-dialog/move-dialog.component'
   styleUrls: ['./file-browser.component.css']
 })
 export class FileBrowserComponent implements OnInit {
+
+  @Input() view: string;
+
+  @Output() dialogClosed = new EventEmitter<FileInfo>()
 
   constructor(private fileOpsService: FileOperationsService,
               private systemsService: SystemsService,
@@ -41,12 +48,12 @@ export class FileBrowserComponent implements OnInit {
   
   currentPath: string;
   canNavigateUp: number;
-  view: string;
   numSelected: number;
+  state: string;
 
 
   ngOnInit(): void {
-    this.view = 'tile';
+    this.state = 'loading';
     this.systemsService.getSystems()
       .subscribe( 
         (resp) => {
@@ -89,14 +96,19 @@ export class FileBrowserComponent implements OnInit {
   }
 
   browseFolder(path: string) {
+    this.state = 'loading';
     let count = (path.match(/\//g) || []).length;
     this.canNavigateUp = count;
     this.fileOpsService.listFiles(this.activeSystem.id, path)
       .subscribe( 
         (resp) => {
-          resp.result.shift();
-          this.activeFiles = resp.result;
-          this.clearSelected();
+          if (resp.result[0].system === this.activeSystem.id) {
+            if (this.view == 'move') resp.result = resp.result.filter( (file) => file.format == 'folder' )
+            resp.result.shift();
+            this.activeFiles = resp.result;
+            this.clearSelected();
+            this.state = 'loaded';
+          }
         }, (err) => {
           this.error = err;
           console.log(err);
@@ -138,26 +150,32 @@ export class FileBrowserComponent implements OnInit {
       );
   }
 
-  openMoveDialog() {
-    const dialogConfig = new MatDialogConfig();
+  moveTo(): void {
+    
+  }
 
+  openMoveDialog() {
+
+    
+    const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.minWidth = 300;
 
     dialogConfig.data = {
         system: this.activeSystem,
         path: this.currentPath
     };
 
-    let dialogRef = this.dialog2.open(MoveDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(res => {
-      this.fileOpsService.insert(this.activeSystem.id, this.currentPath, undefined, res).subscribe(
-        (res) => {
-          console.log(res);
-        },
-        (err) => this.error = err
+    if(this.numSelected > 0) {
+      let dialogRef = this.dialog2.open(MoveDialogComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(res => {
+            this.copyTo(res)
+          }
       );
-    });
+    } else {
+      alert('No Files Selected');
+    }
   }
 
 
@@ -224,7 +242,20 @@ export class FileBrowserComponent implements OnInit {
     this.clearSelected();
   }
 
-  moveTo( element: any) {
+  copyTo( element: FileInfo): void {
+    if(confirm('Are you sure you want to copy the selected files to ' + element.path + ' on ' + element.system + '?')) {
+      this.activeFiles.forEach( (file) => {
+        if(file.selected == true) {
+          this.fileOpsService.copyTo(this.activeSystem.id, file.path, element.system, element.path).subscribe( 
+            (res) => {
+              this.uploadResponse = res;
+              console.log(this.uploadResponse);
+              alert('Transfer Started');
+            }, (err) => this.error = err
+          );
+        }
+      });
+    }
 
   }
 
@@ -338,6 +369,10 @@ export class FileBrowserComponent implements OnInit {
 
   ctrlSelect(file: FileInfo): void {
     this.toggleSelect(file);
+  }
+
+  dialogClose(file: FileInfo): void {
+    this.dialogClosed.emit(file);
   }
 
 }

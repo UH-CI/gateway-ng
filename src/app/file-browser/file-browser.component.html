@@ -10,20 +10,24 @@
 </mat-form-field>
 
 </div>
-
 <mat-toolbar>
   <mat-icon *ngIf="canNavigateUp > 0" class="pointer" (click)="navigateUp()">
     arrow_back
   </mat-icon>
   <span style="margin-left: 8px"> {{currentPath || 'Files'}} </span>
   <span class="spacer"></span>
-    <mat-icon class="pointer" (click)="totalRefresh()">
+
+  <div  *ngIf="view !== 'move'">
+  <mat-icon class="pointer" (click)="totalRefresh()">
     refresh
   </mat-icon>
-    <mat-icon class="pointer" (click)="recursiveDownload()">
+  <mat-icon class="pointer" (click)="openMoveDialog()">
+    folder_shared
+  </mat-icon>
+  <mat-icon class="pointer" (click)="recursiveDownload()">
     cloud_download
   </mat-icon>
-    <mat-icon class="pointer" (click)="recursiveDelete()">
+  <mat-icon class="pointer" (click)="recursiveDelete()">
     delete
   </mat-icon>
   <mat-icon class="pointer" (click)="changeView('list')">
@@ -38,8 +42,18 @@
   <mat-icon class="pointer" (click)="openFileUploadDialog()">
     cloud_upload
   </mat-icon>
-
+  </div>
 </mat-toolbar>
+<div class="spinner">
+  <mat-spinner [diameter]="50" *ngIf="state === 'loading'"></mat-spinner>
+</div>
+<app-file-move
+    [fileElements] = "listing$ | async"
+    [canNavigateUp] = "canNavigateUp"
+    [path] = "currentPath"
+    (select) = "dialogClose($event)"
+    (open) = "navigateDown($event)"
+    *ngIf="view === 'move' && state === 'loaded'"></app-file-move>
 <app-file-tile
     [fileElements] = "listing$ | async"
     [canNavigateUp] = "canNavigateUp"
@@ -56,7 +70,7 @@
     (fileDownload) = "downloadElement($event)"
     (fileUpload) = "uploadFile($event)"
     (navigatedUp) = "navigateUp()"
-    *ngIf="view === 'tile'"></app-file-tile>
+    *ngIf="view === 'tile' && state === 'loaded'"></app-file-tile>
 <app-file-list 
     [fileElements] = "listing$ | async"
     [canNavigateUp] = "canNavigateUp"
@@ -71,4 +85,4 @@
     (fileDownload) = "downloadElement($event)"
     (fileUpload) = "uploadFile($event)"
     (navigatedUp) = "navigateUp()"
-    *ngIf="view === 'list'"></app-file-list>
+    *ngIf="view === 'list' && state === 'loaded'"></app-file-list>

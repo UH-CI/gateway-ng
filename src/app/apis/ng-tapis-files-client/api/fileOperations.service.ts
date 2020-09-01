@@ -421,4 +421,56 @@ export class FileOperationsService {
         );
     }
 
+    public copyTo(systemId: string, path: string, destSystemID: string, destPath: string,  observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
+        if (systemId === null || systemId === undefined) {
+            throw new Error('Required parameter systemId was null or undefined when calling rename.');
+        }
+        if (path === null || path === undefined) {
+            throw new Error('Required parameter path was null or undefined when calling rename.');
+        }
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter newName was null or undefined when calling rename.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+
+        let headers = this.defaultHeaders;
+
+        let urldata = 'agave://' + systemId + path;
+
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
+        let data = {
+            urlToIngest: urldata,
+        }
+
+        return this.httpClient.post<FileStringResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(destSystemID))}${encodeURIComponent(String(destPath)).replace(/%2F/g,"/")}`,
+            data,
+            {
+                params: queryParameters,
+                responseType: <any>responseType,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
 }

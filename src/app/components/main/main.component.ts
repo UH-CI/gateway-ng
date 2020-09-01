@@ -17,6 +17,7 @@ export class MainComponent implements OnInit {
   currentRoot: FileInfo;
   currentPath: string;
   canNavigateUp = false;
+  defaultView: string;
 
 
   constructor(
@@ -25,6 +26,7 @@ export class MainComponent implements OnInit {
     private contentService: ContentService,) { }
 
   ngOnInit(): void {
+    this.defaultView = 'tile';
     console.log("WEWEASDASDSDFDS");
   }
 

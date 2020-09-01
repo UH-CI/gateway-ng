@@ -56,7 +56,10 @@ import { FileBrowserComponent } from './file-browser/file-browser.component';
 import { FileListComponent } from './file-browser/file-list/file-list.component';
 import { FileTileComponent } from './file-browser/file-tile/file-tile.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MoveDialogComponent } from './file-browser/modals/move-dialog/move-dialog.component';
+import { FileMoveComponent } from './file-browser/file-move/file-move.component';
+import { TestDialogComponent } from './file-browser/modals/test-dialog/test-dialog.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -83,7 +86,9 @@ export function initializeApp(appConfig: AppConfig) {
     FileBrowserComponent,
     FileListComponent,
     FileTileComponent,
-    MoveDialogComponent
+    MoveDialogComponent,
+    FileMoveComponent,
+    TestDialogComponent
   ],
   imports: [
     FilesClient.forRoot((): Configuration => new Configuration({basePath: environment.baseUrl})),
@@ -107,6 +112,7 @@ export function initializeApp(appConfig: AppConfig) {
     FlexLayoutModule,
     MatGridListModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
     MatDialogModule,
     MatInputModule,
     FormsModule,

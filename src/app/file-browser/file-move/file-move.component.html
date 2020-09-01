@@ -1,0 +1,22 @@
+<mat-table [dataSource]="fileElements" class="scrollWrapper">
+    <ng-container matColumnDef="icon">
+        <mat-cell *matCellDef="let element">
+            <mat-icon class="icon">folder</mat-icon>
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="name">
+        <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="open">
+        <mat-cell *matCellDef="let element">
+            <button (click)="openEmit(element)">Open</button>
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="select">
+        <mat-cell *matCellDef="let element">
+            <button (click)="selectEmit(element)">Select</button>
+        </mat-cell>
+    </ng-container>
+
+    <mat-row *matRowDef="let row; columns: tableCols"></mat-row>
+</mat-table>

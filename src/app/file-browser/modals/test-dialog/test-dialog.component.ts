@@ -3,17 +3,17 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { FileInfo } from 'src/app/apis/ng-tapis-files-client';
 
 @Component({
-  selector: 'app-move-dialog',
-  templateUrl: './move-dialog.component.html',
-  styleUrls: ['./move-dialog.component.css']
+  selector: 'app-test-dialog',
+  templateUrl: './test-dialog.component.html',
+  styleUrls: ['./test-dialog.component.css']
 })
-export class MoveDialogComponent implements OnInit {
+export class TestDialogComponent implements OnInit {
 
   defaultView: string;
 
   tableCols: string[] = ['icon','name','open','select'];
-  
-  constructor(private dialogRef: MatDialogRef<MoveDialogComponent>) { }
+
+  constructor(private dialogRef: MatDialogRef<TestDialogComponent>) { }
 
   ngOnInit(): void {
     this.defaultView = 'move'
@@ -22,4 +22,6 @@ export class MoveDialogComponent implements OnInit {
   dialogClosed(file: FileInfo): void {
     this.dialogRef.close(file);
   }
+  
+
 }

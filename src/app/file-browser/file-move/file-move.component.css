@@ -1,0 +1,22 @@
+.scrollWrapper {
+    height:250px;
+    min-width: 300px;
+    overflow-y:scroll;
+}
+mat-cell:nth-child(1),
+mat-header-cell:nth-child(1) {
+    flex: 0 0 10%;
+}
+
+mat-cell:nth-child(2),
+mat-header-cell:nth-child(2) {
+    flex: 0 0 40%;
+    padding: 2px;
+}
+
+mat-cell:nth-child(3),
+mat-header-cell:nth-child(3),
+mat-cell:nth-child(4),
+mat-header-cell:nth-child(4) {
+    padding: 3px;
+}
