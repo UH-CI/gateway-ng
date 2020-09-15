@@ -23,6 +23,7 @@
   
   .pointer {
     cursor: pointer;
+    padding: 6px;
   }
   
   .spacer {

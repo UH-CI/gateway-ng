@@ -150,8 +150,8 @@ export class FileBrowserComponent implements OnInit {
       );
   }
 
-  moveTo(): void {
-    
+  moveTo( element: FileInfo): void {
+
   }
 
   openMoveDialog() {

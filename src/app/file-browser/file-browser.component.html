@@ -18,31 +18,32 @@
   <span class="spacer"></span>
 
   <div  *ngIf="view !== 'move'">
-  <mat-icon class="pointer" (click)="totalRefresh()">
+    <mat-icon class="pointer" aria-label="List View" title="List View" (click)="changeView('list')">
+      view_list
+    </mat-icon>
+    <mat-icon class="pointer" aria-label="Tile View" title="Tile View" (click)="changeView('tile')">
+      view_module
+    </mat-icon>
+  </div>
+  <div style="font-size: 50px;">|</div>
+  <mat-icon class="pointer" title="Refresh" (click)="totalRefresh()">
     refresh
   </mat-icon>
-  <mat-icon class="pointer" (click)="openMoveDialog()">
-    folder_shared
+  <mat-icon class="pointer" title="Move Selected Files" (click)="openMoveDialog()">
+    file_copy
   </mat-icon>
-  <mat-icon class="pointer" (click)="recursiveDownload()">
+  <mat-icon class="pointer" title="Download Selected Files" (click)="recursiveDownload()">
     cloud_download
   </mat-icon>
-  <mat-icon class="pointer" (click)="recursiveDelete()">
+  <mat-icon class="pointer" title="Delete Selected Files" (click)="recursiveDelete()">
     delete
   </mat-icon>
-  <mat-icon class="pointer" (click)="changeView('list')">
-    view_list
-  </mat-icon>
-  <mat-icon class="pointer" (click)="changeView('tile')">
-    view_module
-  </mat-icon>
-  <mat-icon class="pointer" (click)="openNewFolderDialog()">
+  <mat-icon class="pointer" title="Create New Folder" (click)="openNewFolderDialog()">
     create_new_folder
   </mat-icon>
-  <mat-icon class="pointer" (click)="openFileUploadDialog()">
+  <mat-icon class="pointer" title="Upload File" (click)="openFileUploadDialog()">
     cloud_upload
   </mat-icon>
-  </div>
 </mat-toolbar>
 <div class="spinner">
   <mat-spinner [diameter]="50" *ngIf="state === 'loading'"></mat-spinner>
