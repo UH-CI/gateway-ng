@@ -16,7 +16,7 @@ export class AppComponent implements AfterViewInit{
   title = 'gateway';
   currentUser: User;
   public tenant = AppConfig.settings.aad.tenant
-
+  public isExpanded = false;
 
   @ViewChild('appsidenav') private appsidenav: any;
 
@@ -26,5 +26,9 @@ export class AppComponent implements AfterViewInit{
   ngAfterViewInit() {
     this.sidenavService.setExpand(this.appsidenav);
     console.log(AppConfig.settings.aad.loginURL);
+  }
+
+  toggle(): void {
+    this.isExpanded = !this.isExpanded;
   }
 }

@@ -10,6 +10,7 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button'
 import { MatDialogModule } from '@angular/material/dialog'
@@ -99,6 +100,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
+    MatCardModule,
     MatListModule,
     MatTableModule,
     FileManagerAllModule,

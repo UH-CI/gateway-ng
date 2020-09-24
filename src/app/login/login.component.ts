@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
     submitted = false;
     returnUrl: string;
     error = '';
+    loginInvalid = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -50,18 +51,24 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.invalid) {
             return;
         }
+        console.log(this.loginInvalid);
 
         this.loading = true;
         this.authenticationService.login(this.f.username.value, this.f.password.value)
             .pipe(first())
             .subscribe(
                 data => {
+                    if(data.error != undefined) this.loginInvalid = true;
                     this.router.navigate([this.returnUrl]);
                     this.loading = false;
+                    console.log(data)
                 },
                 error => {
+                    console.log(error)
+                    this.loginInvalid = true;
                     this.error = error;
                     this.loading = false;
+                    console.log(this.loginInvalid);
                 });
     }
 }

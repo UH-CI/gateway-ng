@@ -25,23 +25,23 @@
       view_module
     </mat-icon>
   </div>
-  <div style="font-size: 50px;">|</div>
-  <mat-icon class="pointer" title="Refresh" (click)="totalRefresh()">
+  <div *ngIf="view !== 'move'" style="font-size: 50px;">|</div>
+  <mat-icon *ngIf="view !== 'move'" class="pointer" title="Refresh" (click)="totalRefresh()">
     refresh
   </mat-icon>
-  <mat-icon class="pointer" title="Move Selected Files" (click)="openMoveDialog()">
+  <mat-icon *ngIf="view !== 'move'" class="pointer" title="Copy Selected Files To Location" (click)="openMoveDialog()">
     file_copy
   </mat-icon>
-  <mat-icon class="pointer" title="Download Selected Files" (click)="recursiveDownload()">
+  <mat-icon *ngIf="view !== 'move'" class="pointer" title="Download Selected Files" (click)="recursiveDownload()">
     cloud_download
   </mat-icon>
-  <mat-icon class="pointer" title="Delete Selected Files" (click)="recursiveDelete()">
+  <mat-icon *ngIf="view !== 'move'" class="pointer" title="Delete Selected Files" (click)="recursiveDelete()">
     delete
   </mat-icon>
-  <mat-icon class="pointer" title="Create New Folder" (click)="openNewFolderDialog()">
+  <mat-icon *ngIf="view !== 'move'" class="pointer" title="Create New Folder" (click)="openNewFolderDialog()">
     create_new_folder
   </mat-icon>
-  <mat-icon class="pointer" title="Upload File" (click)="openFileUploadDialog()">
+  <mat-icon *ngIf="view !== 'move'" class="pointer" title="Upload File" (click)="openFileUploadDialog()">
     cloud_upload
   </mat-icon>
 </mat-toolbar>

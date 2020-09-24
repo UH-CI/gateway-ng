@@ -2,23 +2,9 @@
   <mat-sidenav [ngClass]="isExpanded ? 'example-sidenav-opened' : 'example-sidenav-closed'" diableClose #sidenav [fixedInViewport]="false" mode="side" opened="true" >
 
     <mat-nav-list>
-	  <mat-list-item >
-	  	<h4 mat-line routerLink="/" routerLinkActive="active" *ngIf="isExpanded"><img src="../assets/img/ike-logo.png" alt="logo" class="logo-default"></h4>
-        <button mat-icon-button (click)="toggle()">
-			<mat-icon>menu</mat-icon>
-		</button>
-      </mat-list-item>
       <mat-list-item routerLink="/" routerLinkActive="active">	
-		<h4 mat-line *ngIf="isExpanded">Management A</h4>
-		<mat-icon class="icontest">person</mat-icon> 
-      </mat-list-item>
-      <mat-list-item>
-	    <h4 mat-line *ngIf="isExpanded">Management B</h4>
-        <mat-icon>assignment</mat-icon>
-      </mat-list-item>
-      <mat-list-item>
-	    <h4 mat-line *ngIf="isExpanded">Management C</h4>
-        <mat-icon>domain</mat-icon>
+		<h4 mat-line *ngIf="isExpanded">Home</h4>
+		<mat-icon class="icontest">home</mat-icon> 
       </mat-list-item>
       <mat-list-item routerLink="/filemanager" routerLinkActive="active">
 			<h4 mat-line *ngIf="isExpanded">File Manager</h4>
@@ -28,9 +14,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content [ngClass]="isExpanded ? 'opened' : 'closed'">
-    <app-header></app-header>
-  <div class="content">
 	  <router-outlet></router-outlet>
-  </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>

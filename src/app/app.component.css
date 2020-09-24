@@ -3,5 +3,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-  }
-  
+    height: 60px;
+    background-color: #2b3643;
+    color: white;
+    }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SidenavServiceService } from '../sidenav-service.service';
 
 import { Router } from '@angular/router';
@@ -16,7 +16,10 @@ export class HeaderComponent {
 
   currentUser: User;
   public tenant = AppConfig.settings.aad.tenant
-  
+  @Input() isExpanded: boolean;
+  @Output() toggle = new EventEmitter()
+
+
 	constructor(
     private sidenav: SidenavServiceService,
     private router: Router,
@@ -29,13 +32,11 @@ export class HeaderComponent {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);
+
   }
 
-  toggleRightSidenav() {
-    this.toggleActive = !this.toggleActive;
-    this.sidenav.toggleExpand();
-
-    console.log('Clicked');
+  toggleSidenav() {
+    this.toggle.emit();
   }
 
 }

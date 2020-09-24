@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { SidenavServiceService } from '../sidenav-service.service';
 import { MatSidenav} from '@angular/material/sidenav';
 
@@ -11,7 +11,7 @@ export class SidenavComponent implements AfterViewInit {
 
   @ViewChild('sidenav') public sidenav: MatSidenav;
 
-  public isExpanded: boolean = false;
+  @Input() isExpanded: boolean;
 
 	constructor(private sidenavService: SidenavServiceService) {	}
 
