@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SidenavServiceService } from '../sidenav-service.service';
 
 import { Router } from '@angular/router';
 
@@ -21,7 +20,6 @@ export class HeaderComponent {
 
 
 	constructor(
-    private sidenav: SidenavServiceService,
     private router: Router,
     private authenticationService: AuthenticationService
     ) {
