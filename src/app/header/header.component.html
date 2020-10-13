@@ -13,9 +13,9 @@
       <mat-icon>power_settings_new</mat-icon>
       Login
     </button>
-    <button mat-button *ngIf="currentUser != null" (click)="logout()">
-      <mat-icon>exit_to_app</mat-icon>
-      Logout
+    <button mat-button *ngIf="currentUser != null && tokenCountdown != null">
+      <mat-icon  (click)="logout()">exit_to_app</mat-icon>
+      Expires in {{ stringify(tokenCountdown) }}
     </button>
   </div>
 

@@ -40,6 +40,7 @@ export class AuthenticationService {
                     user.expires_at.setSeconds(user.expires_at.getSeconds() + user.expires_in)
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     this.currentUserSubject.next(user);
+                    console.log(this.currentUser);
                 }
 
                 return user;
