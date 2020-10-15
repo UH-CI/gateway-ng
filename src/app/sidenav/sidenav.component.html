@@ -1,14 +1,14 @@
 <mat-sidenav-container class="example-container" autosize>
-  <mat-sidenav [ngClass]="isExpanded ? 'example-sidenav-opened' : 'example-sidenav-closed'" diableClose #sidenav [fixedInViewport]="false" mode="side" opened="true" >
+  <mat-sidenav class="sidenav"  #sidenav  [(opened)]="isExpanded" [fixedInViewport]="false" mode="side" opened="true" >
 
     <mat-nav-list>
       <mat-list-item routerLink="/" routerLinkActive="active">	
-		<h4 mat-line *ngIf="isExpanded">Home</h4>
+		<h4 mat-line>Home</h4>
 		<mat-icon class="icontest">home</mat-icon> 
       </mat-list-item>
       <mat-list-item routerLink="/filemanager" routerLinkActive="active">
-			<h4 mat-line *ngIf="isExpanded">File Manager</h4>
-			<mat-icon>folder_shared</mat-icon>
+			<h4 mat-line>File Manager</h4>
+			<mat-icon class="icon" >folder_shared</mat-icon>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>

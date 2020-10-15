@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit, HostListener } from '@angular/core'
 import { FileInfo } from '../../apis/ng-tapis-files-client';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
@@ -47,12 +47,20 @@ export class FileTileComponent implements OnInit {
 
   form: FormGroup;
   error: string;
+  breakpoint: number;
 
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       file: ['']
     });
+    this.breakpoint = window.innerWidth/120;
+    console.log(this.breakpoint);
+  }
+  
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.breakpoint = event.target.innerWidth/120;
   }
 
   reset(): void {

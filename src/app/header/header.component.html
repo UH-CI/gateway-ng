@@ -1,13 +1,9 @@
 <mat-toolbar class="fixed-header" color="primary">
-<span>
-<div fxLayout="row" fxShow="false" fxShow.gt-sm>
-		<h4 mat-line [ngClass]="isExpanded ? 'example-sidenav-opened' : 'example-sidenav-closed'" routerLink="/" routerLinkActive="active" *ngIf="isExpanded"><img src="../assets/img/tapis-logo-navbar.png" alt="logo" class="logo-default">NG</h4>
-        <button mat-icon-button (click)="toggleSidenav()">
-			<mat-icon>menu</mat-icon>
+
+    <button mat-icon-button (click)="toggleSidenav()">
+    	<mat-icon>menu</mat-icon>
 		</button>
-</div>
-</span>
-	<div fxLayout="row" fxShow="false" fxShow.gt-sm>
+		<h4 mat-line routerLink="/" routerLinkActive="active"><img src="../assets/img/tapis-logo-navbar.png" alt="logo" class="logo-default">NG</h4>
 	
     	<button mat-button routerLink="/login" *ngIf="currentUser == null">
       <mat-icon>power_settings_new</mat-icon>
@@ -17,6 +13,6 @@
       <mat-icon  (click)="logout()">exit_to_app</mat-icon>
       Expires in {{ stringify(tokenCountdown) }}
     </button>
-  </div>
+
 
 </mat-toolbar>
