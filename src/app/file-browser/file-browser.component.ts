@@ -1,22 +1,14 @@
-import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 import { FileInfo } from '../apis/ng-tapis-files-client';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { MatSpinner } from '@angular/material/progress-spinner';
-
 import {FileOperationsService, ContentService, UploadResponse } from '../apis/ng-tapis-files-client';
 import {SystemsService, TSystem} from '../apis/ng-tapis-systems-client';
 import {Observable, ReplaySubject} from 'rxjs';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup } from  '@angular/forms';
 import { NewFolderDialogComponent } from './modals/new-folder-dialog/new-folder-dialog.component';
-import { RenameDialogComponent } from './modals/rename-dialog/rename-dialog.component';
 import { FileUploadDialogComponent } from './modals/file-upload-dialog/file-upload-dialog.component';
-import { FileTileComponent } from './file-tile/file-tile.component';
-import { FileMoveComponent } from './file-move/file-move.component';
 import { MoveDialogComponent } from './modals/move-dialog/move-dialog.component';
-import { TestDialogComponent } from './modals/test-dialog/test-dialog.component';
+
 
 @Component({
   selector: 'app-file-browser',

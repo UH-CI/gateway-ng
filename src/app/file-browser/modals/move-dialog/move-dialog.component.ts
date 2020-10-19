@@ -10,8 +10,6 @@ import { FileInfo } from 'src/app/apis/ng-tapis-files-client';
 export class MoveDialogComponent implements OnInit {
 
   defaultView: string;
-
-  tableCols: string[] = ['icon','name','open','select'];
   
   constructor(private dialogRef: MatDialogRef<MoveDialogComponent>) { }
 

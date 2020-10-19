@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FileBrowserComponent } from './file-browser.component';
 
 describe('FileBrowserComponent', () => {
