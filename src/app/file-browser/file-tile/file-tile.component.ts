@@ -79,6 +79,13 @@ export class FileTileComponent implements OnInit {
     viewChild.openMenu();
   }
 
+  trim(input: string): string {
+    let output = input;
+    if(output.length > 14) {
+      output = output.substr(0,13) + '...'
+    }
+    return output
+  }
   moveElement(source: FileInfo, destination: FileInfo) {
     this.moveTo.emit({source: source, dest: destination});
   }

@@ -1,5 +1,5 @@
 
-<mat-table [dataSource]="fileElements" class="mat-elevation-z8">
+<mat-table [dataSource]="fileElements" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="select">
         <mat-header-cell *matHeaderCellDef>Select</mat-header-cell>
         <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">
@@ -12,15 +12,15 @@
         </mat-cell>
     </ng-container>
     <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
         <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">{{ element.name }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="length">
-        <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Size</mat-header-cell>
         <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">{{ element.length }} KB</mat-cell>
     </ng-container>
     <ng-container matColumnDef="lastModified">
-        <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Last Modified</mat-header-cell>
         <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">{{ element.lastModified }}</mat-cell>
     </ng-container>
 

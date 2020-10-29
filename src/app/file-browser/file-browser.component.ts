@@ -215,7 +215,7 @@ export class FileBrowserComponent implements OnInit {
 
 
   recursiveDelete(): void {
-    if (confirm('Are you sure you want to delete selected files?')) {
+    if (confirm('Are you sure you want to delete the following files?\n' + this.selectedFiles())) {
       this.activeFiles.forEach( 
         (value) => {
           if(value.selected) this.delete(value);
@@ -249,8 +249,18 @@ export class FileBrowserComponent implements OnInit {
     );
   }
 
+  selectedFiles(): string {
+    let fileList = "";
+    this.activeFiles.forEach( (file) => {
+      if(file.selected == true ) {
+       fileList = fileList + '"'+ file.name + '"\n';
+      }
+    });
+    return fileList
+  }
+
   copyTo( element: FileInfo): void {
-    if(confirm('Are you sure you want to copy the selected files to ' + element.path + ' on ' + element.system + '?')) {
+    if(confirm('Are you sure you want to copy the following files to ' + element.path + ' on ' + element.system + '?\n' + this.selectedFiles())) {
       this.activeFiles.forEach( (file) => {
         if(file.selected == true) {
           this.fileOpsService.copyTo(this.activeSystem.id, file.path, element.system, element.path).subscribe( 
