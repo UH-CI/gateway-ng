@@ -47,6 +47,9 @@
 <div class="spinner">
   <mat-spinner [diameter]="50" *ngIf="state === 'loading'"></mat-spinner>
 </div>
+<div *ngIf="state === 'tenantDown'">
+Service Down! Please wait a moment and try refreshing the page.
+</div>
 <app-file-move
     [fileElements] = "listing$ | async"
     [canNavigateUp] = "canNavigateUp"
@@ -70,6 +73,7 @@
     (fileDownload) = "downloadElement($event)"
     (fileUpload) = "uploadFile($event)"
     (navigatedUp) = "navigateUp()"
+    (moveTo) = "moveTo($event)"
     *ngIf="view === 'tile' && state === 'loaded'"></app-file-tile>
 <app-file-list 
     [fileElements] = "listing$ | async"

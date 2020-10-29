@@ -34,6 +34,7 @@ export class FileTileComponent implements OnInit {
   @Output() fileDownload = new EventEmitter<FileInfo>()
   @Output() fileUpload = new EventEmitter<any>()
   @Output() navigatedUp = new EventEmitter()
+  @Output() moveTo = new EventEmitter<{ source: FileInfo, dest: FileInfo}>()
 
   @Output() leftClickFile = new EventEmitter<FileInfo>()
   @Output() shiftClickFile = new EventEmitter<FileInfo>()
@@ -79,7 +80,7 @@ export class FileTileComponent implements OnInit {
   }
 
   moveElement(source: FileInfo, destination: FileInfo) {
-
+    this.moveTo.emit({source: source, dest: destination});
   }
 
   download(element: FileInfo) {

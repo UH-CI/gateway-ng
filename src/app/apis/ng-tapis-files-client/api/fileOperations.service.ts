@@ -512,7 +512,7 @@ export class FileOperationsService {
 
         let data = {
             action: "move",
-            path: destPath
+            path: `${encodeURIComponent(String(destPath)).replace(/%2F/g,"/")}`
         }
 
         return this.httpClient.put<FileStringResponse>(`${this.configuration.basePath}/files/v2/media/system/${encodeURIComponent(String(systemId))}${encodeURIComponent(String(path)).replace(/%2F/g,"/")}`,

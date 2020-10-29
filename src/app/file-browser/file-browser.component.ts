@@ -52,13 +52,16 @@ export class FileBrowserComponent implements OnInit {
           const systems = resp.result.filter( (s) => !s.available);
           this.systemsListing.next(systems);
           this.activeSystemSubject.next(systems[0]);
-        }, (err) => this.error = err
+          console.log(resp);
+        }, (err) => {
+          this.error = err
+          if(err.status == 500) this.state = 'tenantDown';
+        }
       );
-
     this.activeSystem$.subscribe( 
       (next) => {
         this.activeSystem = next;
-        this.refresh([]);
+        this.clear([]);
         this.currentPath = '';
         this.browseFolder(this.currentPath);
       }, (err) => {
@@ -77,7 +80,7 @@ export class FileBrowserComponent implements OnInit {
     this.activeSystemSubject.next(sys);
   }
 
-  refresh(files: FileInfo[]): void {
+  clear(files: FileInfo[]): void {
     this.activeFiles = files;
     this.listing.next(this.activeFiles);
   }
@@ -142,9 +145,7 @@ export class FileBrowserComponent implements OnInit {
       );
   }
 
-  moveTo( element: FileInfo): void {
 
-  }
 
   openMoveDialog() {
 
@@ -232,6 +233,20 @@ export class FileBrowserComponent implements OnInit {
       }
     )
     this.clearSelected();
+  }
+
+  moveTo(object): void {
+    this.fileOpsService.moveTo(this.activeSystem.id, object.source.path, object.dest.path + '/' + object.source.name).subscribe( 
+      (res) => {
+        this.uploadResponse = res;
+        console.log(this.uploadResponse);
+        if (res.status === 'success') {
+          this.browseFolder(this.currentPath);
+        }
+        else (alert(res.status));
+        
+      }, (err) => this.error = err
+    );
   }
 
   copyTo( element: FileInfo): void {
