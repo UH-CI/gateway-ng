@@ -1,14 +1,14 @@
 
-<mat-table [dataSource]="fileElements" matSort class="mat-elevation-z8">
+<mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="select">
-        <mat-header-cell *matHeaderCellDef>Select</mat-header-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef>Select</mat-header-cell>
         <mat-cell *matCellDef="let element" (contextmenu)="openMenu($event, element, menuTrigger)">
             <mat-checkbox
                 [checked]="element.selected"
                 (change)="checkSelect($event.checked, element)"
             ></mat-checkbox>
-            <mat-icon class="icon" *ngIf="element.format == 'folder'">folder</mat-icon>
-            <mat-icon *ngIf="element.format !== 'folder'">insert_drive_file</mat-icon>
+            <mat-icon class="icon" title="Folder" *ngIf="element.format == 'folder'">folder</mat-icon>
+            <mat-icon class="icon" title="File" *ngIf="element.format !== 'folder'">insert_drive_file</mat-icon>
         </mat-cell>
     </ng-container>
     <ng-container matColumnDef="name">

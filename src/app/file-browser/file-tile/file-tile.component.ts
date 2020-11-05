@@ -56,7 +56,7 @@ export class FileTileComponent implements OnInit {
       file: ['']
     });
     this.breakpoint = window.innerWidth/120;
-    console.log(this.breakpoint);
+    //console.log(this.breakpoint);
   }
   
   @HostListener('window:resize', ['$event'])

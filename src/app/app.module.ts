@@ -24,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { HomepageComponent } from './homepage/homepage.component';
 import { FooterComponent } from './footer/footer.component';
+import {MatSortModule} from '@angular/material/sort';
 
 
 import { JwtInterceptor, AuthInterceptor } from './_helpers/jwt.interceptor';
@@ -101,6 +102,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatMenuModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatSortModule,
     MatInputModule,
     FormsModule,
     MatButtonModule,

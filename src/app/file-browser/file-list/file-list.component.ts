@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild, AfterViewInit, DoCheck } from '@angular/core'
 import { FileInfo } from '../../apis/ng-tapis-files-client';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +8,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup } from  '@angular/forms';
 import {Observable, ReplaySubject} from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table'
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-file-list',
@@ -38,6 +39,7 @@ export class FileListComponent implements OnInit {
   @Output() fileUpload = new EventEmitter<any>()
   @Output() navigatedUp = new EventEmitter()
 
+  @ViewChild(MatSort) sort: MatSort;
 
 
   constructor(public dialog: MatDialog,
@@ -47,16 +49,19 @@ export class FileListComponent implements OnInit {
 
   form: FormGroup;
   error: string;
-  tableDataSrc: any;
   tableCols: string[] = ['select','name','length','lastModified'];
-
+  dataSource: any;
   contextMenuPosition = { x: '0px', y: '0px' };
-
+  
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       file: ['']
     });
-    
+    this.dataSource = new MatTableDataSource(this.fileElements);
+  }
+  ngDoCheck(): void {
+
+    this.dataSource.sort = this.sort;
   }
 
 

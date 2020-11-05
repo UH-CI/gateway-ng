@@ -52,7 +52,7 @@ export class FileBrowserComponent implements OnInit {
           const systems = resp.result.filter( (s) => !s.available);
           this.systemsListing.next(systems);
           this.activeSystemSubject.next(systems[0]);
-          console.log(resp);
+          //console.log(resp);
         }, (err) => {
           this.error = err
           if(err.status == 500) this.state = 'tenantDown';
@@ -106,7 +106,7 @@ export class FileBrowserComponent implements OnInit {
           }
         }, (err) => {
           this.error = err;
-          console.log(err);
+          //console.log(err);
           if (err.status == 404) console.log('404 error')
         }
       );
@@ -239,7 +239,7 @@ export class FileBrowserComponent implements OnInit {
     this.fileOpsService.moveTo(this.activeSystem.id, object.source.path, object.dest.path + '/' + object.source.name).subscribe( 
       (res) => {
         this.uploadResponse = res;
-        console.log(this.uploadResponse);
+        //console.log(this.uploadResponse);
         if (res.status === 'success') {
           this.browseFolder(this.currentPath);
         }
@@ -266,7 +266,7 @@ export class FileBrowserComponent implements OnInit {
           this.fileOpsService.copyTo(this.activeSystem.id, file.path, element.system, element.path).subscribe( 
             (res) => {
               this.uploadResponse = res;
-              console.log(this.uploadResponse);
+              //console.log(this.uploadResponse);
               alert('Transfer Started');
             }, (err) => this.error = err
           );
@@ -285,7 +285,7 @@ export class FileBrowserComponent implements OnInit {
     this.contentService.filesGetContents(this.activeSystem.id, element.path)
     .subscribe( 
       (response) => { 
-        console.log(response);
+        //console.log(response);
         this.downLoadFile(response, element.name);
       }
     );
@@ -316,7 +316,7 @@ export class FileBrowserComponent implements OnInit {
       .subscribe( 
         (res) => {
           this.uploadResponse = res;
-          console.log(this.uploadResponse);
+          //console.log(this.uploadResponse);
           this.browseFolder(this.currentPath);
         }, (err) => this.error = err
       );
@@ -331,7 +331,6 @@ export class FileBrowserComponent implements OnInit {
     if (file.selected == true) this.numSelected--;
     else this.numSelected++;
     file.selected = !file.selected;
-    console.log(this.numSelected);
 /*     for (let a of this.activeFiles) {
       if (a.selected == undefined) a.selected = false
       if (a.name == file.name) {
@@ -354,7 +353,6 @@ export class FileBrowserComponent implements OnInit {
   }
 
   leftSelect(file: FileInfo): void {
-    console.log(this.numSelected);
     if (file.format == 'folder' && file.selected && this.numSelected == 1) {
       this.navigateDown(file);
     } else if(this.numSelected == 1 && file.selected) {
